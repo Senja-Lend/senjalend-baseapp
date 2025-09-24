@@ -1,13 +1,14 @@
-"use client";
+import { ProfileLayout } from "@/components/profile/profile-layout";
+import { ProfileHeader } from "@/components/profile/profile-header";
+import { WalletConnectionCard } from "@/components/profile/wallet-connection-card";
+import { UserPortfolioWrapper } from "@/components/profile/user-portfolio-wrapper";
 
-import { memo } from "react";
-import ProfileClient from "@/components/profile-client";
-
-// Force dynamic rendering to prevent server-side execution
-export const dynamic = 'force-dynamic';
-
-const ProfilePage = memo(function ProfilePage() {
-  return <ProfileClient />;
-});
-
-export default ProfilePage;
+export default function ProfilePage() {
+  return (
+    <ProfileLayout>
+      <ProfileHeader />
+      <WalletConnectionCard />
+      <UserPortfolioWrapper />
+    </ProfileLayout>
+  );
+}

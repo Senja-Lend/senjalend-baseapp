@@ -23,6 +23,7 @@ import { formatLargeNumber } from "@/utils/format";
 import { tokens } from "@/lib/addresses/tokenAddress";
 import { useCurrentChainId } from "@/lib/chain";
 import { TokenBalanceTable as SwapTokenBalanceTable } from "../swap/token-balance-table";
+import Image from "next/image";
 
 interface UserPortfolioProps {
   className?: string;
@@ -423,18 +424,19 @@ export const UserPortfolio = memo(function UserPortfolio({
           {!hasValidPosition ? (
             /* No Position State */
             <div className="text-center py-8">
-              <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <TrendingUp className="w-8 h-8 text-gray-400" />
+              <div className="w-25 h-25 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Image
+                  src="/beary/beary-not-found.png"
+                  alt="Beary not found"
+                  width={120}
+                  height={120}
+                />
               </div>
               <h3 className="text-lg font-semibold text-gray-900 mb-2">
                 No Position Found
               </h3>
               <p className="text-gray-600 mb-4">
                 You don&apos;t have a position in the selected pool yet.
-              </p>
-              <p className="text-sm text-gray-500">
-                Try selecting a different pool or use the Supply/Borrow tabs to
-                create a position.
               </p>
             </div>
           ) : (

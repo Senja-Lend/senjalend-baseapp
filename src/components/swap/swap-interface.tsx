@@ -289,26 +289,28 @@ export const SwapInterface = memo(function SwapInterface({
 
   return (
     <div className="w-full max-w-xl mx-auto">
-      <Card className="bg-white/80 backdrop-blur-sm border border-sunset-orange shadow-xl">
-        <CardContent className="p-6">
+      <Card className="bg-white/80 backdrop-blur-sm border border-orange-200 shadow-xl">
+        <CardContent className="p-4 sm:p-6">
           {/* Header */}
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-semibold text-gray-900">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4 mb-6">
+            <h2 className="text-lg sm:text-xl font-semibold text-gray-900">
               Swap Collateral
             </h2>
-            <PoolSearchDialog
-              selectedPool={selectedPool}
-              onPoolSelect={handlePoolSelect}
-            />
+            <div className="w-full sm:w-auto">
+              <PoolSearchDialog
+                selectedPool={selectedPool}
+                onPoolSelect={handlePoolSelect}
+              />
+            </div>
           </div>
 
           {/* From Token Section */}
           <div className="space-y-4">
             <div className="relative">
               <div className="flex items-center justify-between mb-2">
-                <span className="text-sm font-medium text-gray-700">Sell</span>
-                <div className="flex items-center space-x-2">
-                  <span className="text-md text-gray-900">
+                <span className="text-xs md:text-sm font-medium text-gray-700">Sell</span>
+                <div className="flex items-center space-x-2 text-xs md:text-sm">
+                  <span className="text-xs md:text-sm text-gray-900">
                     Balance: {fromTokenBalance || "0.0000"}
                   </span>
                   {fromTokenBalance &&
@@ -324,7 +326,7 @@ export const SwapInterface = memo(function SwapInterface({
                 </div>
               </div>
 
-              <div className="relative bg-sunset-pink-light rounded-xl p-4 border border-sunset-orange">
+              <div className="relative bg-white rounded-xl p-3 sm:p-4 border border-orange-200">
                 <div className="flex items-center justify-between">
                   <div className="flex-1 mr-4">
                     <Input
@@ -334,10 +336,10 @@ export const SwapInterface = memo(function SwapInterface({
                       onChange={(e) => handleFromAmountChange(e.target.value)}
                       min="0"
                       step="0.000001"
-                      className="border-0 bg-transparent text-md sm:text-xl md:text-xl font-medium placeholder:text-gray-400 p-0 h-auto focus-visible:ring-0 text-gray-900"
+                      className="border-0 bg-transparent text-sm sm:text-lg md:text-xl font-medium placeholder:text-gray-400 p-0 h-auto focus-visible:ring-0 text-gray-900 shadow-none"
                     />
                     {fromToken && fromAmount ? (
-                      <div className="text-sm text-gray-500 mt-1">
+                      <div className="text-xs md:text-sm text-gray-500 mt-1">
                         {selectedPool ? (
                           <span>
                             From {selectedPool.collateralTokenInfo?.symbol}{" "}
@@ -348,7 +350,7 @@ export const SwapInterface = memo(function SwapInterface({
                         )}
                       </div>
                     ) : (
-                      <div className="text-sm text-gray-500 mt-1">
+                      <div className="text-xs md:text-sm text-gray-500 mt-1">
                         Enter amount to swap
                       </div>
                     )}
@@ -372,7 +374,7 @@ export const SwapInterface = memo(function SwapInterface({
                 variant="outline"
                 size="icon"
                 onClick={handleSwapTokens}
-                className="h-10 w-10 rounded-full bg-white border border-sunset-orange hover:bg-sunset-orange-light shadow-sm"
+                className="h-10 w-10 rounded-full bg-white border border-orange-200 hover:bg-sunset-orange-light"
               >
                 <ArrowUpDown className="h-4 w-4 text-gray-600" />
               </Button>
@@ -381,13 +383,13 @@ export const SwapInterface = memo(function SwapInterface({
             {/* To Token Section */}
             <div className="relative">
               <div className="flex items-center justify-between mb-2">
-                <span className="text-sm font-medium text-gray-700">Buy</span>
-                <span className="text-sm text-gray-500">
-                  {toToken ? `${toToken.symbol} Token` : "Select token"}
+                <span className="text-xs md:text-sm font-medium text-gray-700">Buy</span>
+                <span className="text-xs md:text-sm text-gray-500">
+                  {toToken ? `${toToken.symbol}` : "Select token"}
                 </span>
               </div>
 
-              <div className="relative bg-sunset-pink-light rounded-xl p-4 border border-sunset-orange">
+              <div className="relative bg-white rounded-xl p-3 sm:p-4 border border-orange-200">
                 <div className="flex items-center justify-between">
                   <div className="flex-1 mr-4">
                     <Input
@@ -397,14 +399,14 @@ export const SwapInterface = memo(function SwapInterface({
                       onChange={(e) => handleToAmountChange(e.target.value)}
                       min="0"
                       step="0.000001"
-                      className="border-0 bg-transparent text-md sm:text-xl md:text-xl font-medium placeholder:text-gray-400 p-0 h-auto focus-visible:ring-0 text-gray-900"
+                      className="border-0 bg-transparent text-sm sm:text-lg md:text-xl font-medium placeholder:text-gray-400 p-0 h-auto focus-visible:ring-0 text-gray-900 shadow-none"
                     />
                     {toToken && toAmount ? (
-                      <div className="text-sm text-gray-500 mt-1">
+                      <div className="text-xs md:text-sm text-gray-500 mt-1">
                         ${(parseFloat(toAmount) * 1).toLocaleString()}
                       </div>
                     ) : (
-                      <div className="text-sm text-gray-500 mt-1">-</div>
+                      <div className="text-xs md:text-sm text-gray-500 mt-1">-</div>
                     )}
                   </div>
                   <TokenSelector

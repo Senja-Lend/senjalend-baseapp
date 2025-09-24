@@ -119,11 +119,11 @@ export const MobilePoolCard = memo(function MobilePoolCard({
 
             {/* Token names */}
             <div className="min-w-0 flex-1">
-              <div className="text-sm font-semibold text-gray-900 truncate">
+              <div className="text-xs md:text-sm font-semibold text-gray-900 truncate">
                 {pool.collateralTokenInfo?.symbol || "UNK"} /{" "}
                 {pool.borrowTokenInfo?.symbol || "UNK"}
               </div>
-              <div className="text-xs text-gray-500 truncate">
+              <div className="text-xs md:text-smtext-gray-500 truncate">
                 {pool.collateralTokenInfo?.name || "Unknown"} →{" "}
                 {pool.borrowTokenInfo?.name || "Unknown"}
               </div>
@@ -141,7 +141,7 @@ export const MobilePoolCard = memo(function MobilePoolCard({
           <div className="grid grid-cols-3 gap-3">
             {/* APY */}
             <div className="text-center">
-              <div className="text-xs font-semibold text-orange-700 uppercase tracking-wide mb-1">
+              <div className="text-xs md:text-sm font-semibold text-orange-700 uppercase tracking-wide mb-1">
                 APY
               </div>
               <div className="text-sm sm:text-base font-semibold text-orange-600">
@@ -151,7 +151,7 @@ export const MobilePoolCard = memo(function MobilePoolCard({
 
             {/* LTV */}
             <div className="text-center">
-              <div className="text-sm font-semibold text-purple-700 uppercase tracking-wide mb-1">
+              <div className="text-xs md:text-sm font-semibold text-purple-700 uppercase tracking-wide mb-1">
                 LTV
               </div>
               <div className="text-sm font-semibold text-purple-600">
@@ -161,19 +161,19 @@ export const MobilePoolCard = memo(function MobilePoolCard({
 
             {/* Liquidity */}
             <div className="text-center">
-              <div className="text-sm font-semibold text-amber-700 uppercase tracking-wide mb-1">
+              <div className="text-xs md:text-sm font-semibold text-amber-700 uppercase tracking-wide mb-1">
                 Liquidity
               </div>
               <div className="flex items-center justify-center gap-1">
                 <div className="text-sm sm:text-sm font-semibold text-amber-600">
                   {formattedLiquidity.amount}
                 </div>
-                <div className="text-sm font-semibold text-amber-600">
+                <div className="text-xs md:text-sm font-semibold text-amber-600">
                   {formattedLiquidity.symbol}
                 </div>
               </div>
               {totalSupplyAssetsLoading && (
-                <div className="text-sm text-green-600 mt-0.5">Updating...</div>
+                <div className="text-xs md:text-sm text-green-600 mt-0.5">Updating...</div>
               )}
             </div>
           </div>

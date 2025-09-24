@@ -1,12 +1,15 @@
+import { headers } from "next/headers";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "@/styles/globals.css";
-import "@rainbow-me/rainbowkit/styles.css";
-import Providers from "./providers";
+import "@coinbase/onchainkit/styles.css";
+import { Providers } from "./providers";
 import AuroraBackground from "@/components/aurora-ui";
 import AppWrapper from "@/components/app-wrapper";
 import SenjaHeader from "@/components/header/senja-header";
 import { BottomNavigation } from "@/components/navbar";
+import { cookieToInitialState } from "wagmi";
+import { getConfig } from "@/lib/config";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -22,8 +25,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const URL = process.env.NEXT_PUBLIC_URL;
   return {
     title: process.env.NEXT_PUBLIC_ONCHAINKIT_PROJECT_NAME,
-    description:
-      "Crosschain Lending Protocol",
+    description: "Crosschain Lending Protocol",
     other: {
       "fc:frame": JSON.stringify({
         version: "next",
@@ -44,11 +46,15 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const initialState = cookieToInitialState(
+    getConfig(),
+    (await headers()).get("cookie")
+  );
   return (
     <html lang="en">
       <body
@@ -56,9 +62,11 @@ export default function RootLayout({
       >
         <AuroraBackground />
         <AppWrapper>
-          <Providers>
+          <Providers initialState={initialState}>
             <SenjaHeader />
-            {children}
+            <div className="pt-20">
+              {children}
+            </div>
             <div className="mt-6">
               <BottomNavigation />
             </div>

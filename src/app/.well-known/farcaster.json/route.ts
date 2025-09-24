@@ -14,31 +14,39 @@ function withValidProperties(
 
 export async function GET() {
   const URL = process.env.NEXT_PUBLIC_URL;
+  const PROJECT_NAME =
+    process.env.NEXT_PUBLIC_ONCHAINKIT_PROJECT_NAME || "senja";
+  const APP_HERO_IMAGE = process.env.NEXT_PUBLIC_APP_HERO_IMAGE;
+  const SPLASH_IMAGE = process.env.NEXT_PUBLIC_SPLASH_IMAGE;
+  const SPLASH_BACKGROUND_COLOR =
+    process.env.NEXT_PUBLIC_SPLASH_BACKGROUND_COLOR || "#000000";
+  const FARCASTER_HEADER = process.env.FARCASTER_HEADER;
+  const FARCASTER_PAYLOAD = process.env.FARCASTER_PAYLOAD;
+  const FARCASTER_SIGNATURE = process.env.FARCASTER_SIGNATURE;
+  const ALLOWED_ADDRESSES = process.env.ALLOWED_ADDRESSES;
 
   return Response.json({
     accountAssociation: {
-      header:
-        "eyJmaWQiOjEzMTg0NDcsInR5cGUiOiJhdXRoIiwia2V5IjoiMHg1MzFGYURDMkMyQWI1ZDE4QzliMDdDNThlZjI3MUVBM2I4OGE2Zjg5In0",
-      payload: "eyJkb21haW4iOiJzZW5qYS1maS52ZXJjZWwuYXBwIn0",
-      signature:
-        "dVrejLBi33DHSrjSSUk4ymSuu/d9L3+6H/jBSENShTJprpxWe60HVjY+32w+22ye3eO6lgqoMrOGh7NnoElZaRs=",
+      header: FARCASTER_HEADER,
+      payload: FARCASTER_PAYLOAD,
+      signature: FARCASTER_SIGNATURE,
     },
     frame: {
-      name: "senja",
-      homeUrl: "https://senja-fi.vercel.app",
-      iconUrl: "https://senja-fi.vercel.app/senja-logo.png",
+      name: PROJECT_NAME,
+      homeUrl: URL || "https://senja-fi.vercel.app",
+      iconUrl: APP_HERO_IMAGE || `${URL}/senja-logo.png`,
       version: "1",
-      imageUrl: "https://senja-fi.vercel.app/senja-logo.png",
-      subtitle: "senja",
-      webhookUrl: "https://senja-fi.vercel.app/api/webhook",
-      description: "senja",
-      splashImageUrl: "https://senja-fi.vercel.app/senja-logo.png",
+      imageUrl: APP_HERO_IMAGE || `${URL}/senja-logo.png`,
+      subtitle: PROJECT_NAME,
+      webhookUrl: `${URL}/api/webhook`,
+      description: PROJECT_NAME,
+      splashImageUrl: SPLASH_IMAGE || `${URL}/senja-logo.png`,
       primaryCategory: "finance",
-      splashBackgroundColor: "#000000",
+      splashBackgroundColor: SPLASH_BACKGROUND_COLOR,
     },
 
     baseBuilder: {
-      allowedAddresses: ["0xDCde6D1373e56a262DD06bf37572562D055d9888"],
+      allowedAddresses: ALLOWED_ADDRESSES,
     },
   });
 }

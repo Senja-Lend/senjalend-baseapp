@@ -1,30 +1,31 @@
 "use client";
+import { ReactNode } from "react";
+import { base } from "wagmi/chains";
+import { OnchainKitProvider } from "@coinbase/onchainkit";
+import "@coinbase/onchainkit/styles.css";
 
-import "@rainbow-me/rainbowkit/styles.css";
-import { lightTheme, RainbowKitProvider } from "@rainbow-me/rainbowkit";
-import { WagmiProvider } from "wagmi";
-import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
-import config from "@/lib/config";
-import FarcasterProvider from "@/components/providers/farcaster-provider";
-
-const queryClient = new QueryClient();
-const Providers = ({ children }: { children: React.ReactNode }) => {
+export function Providers({
+  children,
+  initialState,
+}: {
+  children: ReactNode;
+  initialState: unknown;
+}) {
   return (
-    <FarcasterProvider>
-      <WagmiProvider config={config}>
-        <QueryClientProvider client={queryClient}>
-          <RainbowKitProvider
-            initialChain={8453}
-            theme={lightTheme()}
-            coolMode={true}
-            modalSize="compact"
-          >
-            {children}
-          </RainbowKitProvider>
-        </QueryClientProvider>
-      </WagmiProvider>
-    </FarcasterProvider>
+    <OnchainKitProvider
+      apiKey={process.env.NEXT_PUBLIC_ONCHAINKIT_API_KEY}
+      chain={base}
+      config={{
+        appearance: {
+          mode: "light",
+        },
+        wallet: {
+          display: "modal",
+          preference: "all",
+        },
+      }}
+    >
+      {children}
+    </OnchainKitProvider>
   );
-};
-
-export default Providers;
+}

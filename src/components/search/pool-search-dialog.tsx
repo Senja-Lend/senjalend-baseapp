@@ -122,7 +122,7 @@ export const PoolSearchDialog = memo(function PoolSearchDialog({
       <Button
         variant="outline"
         onClick={() => setIsOpen(!isOpen)}
-        className={`flex items-center gap-3 px-4 py-1 h-auto bg-gradient-to-r from-white to-orange-50 border-2 border-sunset-orange hover:border-orange-400 hover:from-orange-50 hover:to-orange-100 shadow-md hover:shadow-lg transition-all duration-200 rounded-xl ${triggerClassName}`}
+        className={`flex items-center gap-3 px-4 py-1 h-auto bg-gradient-to-r from-white to-orange-50 border-2 border-orange-200 hover:border-orange-300 hover:from-orange-50 hover:to-orange-50 shadow-md hover:shadow-lg transition-all duration-200 rounded-xl ${triggerClassName}`}
       >
         {selectedPool ? (
           <div className="flex items-center gap-3">
@@ -177,7 +177,7 @@ export const PoolSearchDialog = memo(function PoolSearchDialog({
       </Button>
 
       <Dialog open={isOpen} onOpenChange={handleCloseDialog}>
-        <DialogContent className="bg-white border-2 border-sunset-orange shadow-2xl rounded-2xl max-w-xl w-[calc(100vw-2rem)] sm:w-full">
+        <DialogContent className="bg-white border-2 border-orange-200 shadow-2xl rounded-2xl max-w-xl w-[calc(100vw-2rem)] sm:w-full">
           <DialogHeader className="pb-4">
             <div className="flex items-center justify-between">
               <DialogTitle className="text-lg font-bold text-gray-900 flex items-center gap-2">
