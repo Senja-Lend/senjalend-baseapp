@@ -19,6 +19,7 @@ const TokenBalance = memo(function TokenBalance({
   isCollateralBalance?: boolean;
 }) {
   const currentChainId = useCurrentChainId();
+  const [showLoading, setShowLoading] = React.useState(false);
   
   // Always use collateral balance from position for both "from" and "to" tokens
   const { parsedUserCollateralBalance, userCollateralBalanceLoading } = useReadUserCollateralBalance(
@@ -30,7 +31,20 @@ const TokenBalance = memo(function TokenBalance({
   const balance = parsedUserCollateralBalance;
   const isLoading = userCollateralBalanceLoading;
 
-  if (isLoading) {
+  // Add delay before showing loading state
+  React.useEffect(() => {
+    if (isLoading) {
+      const timer = setTimeout(() => {
+        setShowLoading(true);
+      }, 2000); // Show loading after 2 seconds
+
+      return () => clearTimeout(timer);
+    } else {
+      setShowLoading(false);
+    }
+  }, [isLoading]);
+
+  if (isLoading && showLoading) {
     return (
       <div className="text-right">
         <div className="flex items-center justify-end gap-2">

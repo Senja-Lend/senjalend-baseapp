@@ -70,7 +70,21 @@ const TokenBalanceRow = ({
   usdtValueLoading,
   onRepayClick,
 }: TokenBalanceRowProps) => {
+  const [showLoading, setShowLoading] = React.useState(false);
   const canRepay = parseFloat(balance) > 0;
+
+  // Add delay before showing loading state
+  React.useEffect(() => {
+    if (balanceLoading) {
+      const timer = setTimeout(() => {
+        setShowLoading(true);
+      }, 2000); // Show loading after 2 seconds
+
+      return () => clearTimeout(timer);
+    } else {
+      setShowLoading(false);
+    }
+  }, [balanceLoading]);
 
   return (
     <div className="flex items-center justify-between p-3 bg-white/50 rounded-lg border border-gray-200/50">
@@ -101,7 +115,7 @@ const TokenBalanceRow = ({
       <div className="flex items-center space-x-3">
         <div className="text-right">
           <div className="text-sm text-gray-900">
-            {balanceLoading ? (
+            {balanceLoading && showLoading ? (
               <div className="flex items-center justify-end gap-2">
                 <div className="w-4 h-4 border-2 border-orange-500 border-t-transparent rounded-full animate-spin"></div>
                 <span className="text-xs text-gray-500">Loading...</span>
@@ -111,7 +125,7 @@ const TokenBalanceRow = ({
             )}
           </div>
           <div className="text-xs text-gray-500">{token.symbol}</div>
-          
+
           {/* USDT Value Display */}
           {canRepay && (
             <div className="text-xs text-green-600 mt-1">
@@ -156,43 +170,40 @@ const TokenBalanceItem = ({
   const currentChainId = useCurrentChainId();
 
   // Get collateral balance for this specific token
-  const { 
-    parsedUserCollateralBalance, 
-    userCollateralBalanceLoading
-  } = useReadUserCollateralBalance(
-    (poolAddress as `0x${string}`) ||
-      "0x0000000000000000000000000000000000000000",
-    (token.addresses[currentChainId] as `0x${string}`) ||
-      "0x0000000000000000000000000000000000000000",
-    token.decimals
-  );
+  const { parsedUserCollateralBalance, userCollateralBalanceLoading } =
+    useReadUserCollateralBalance(
+      (poolAddress as `0x${string}`) ||
+        "0x0000000000000000000000000000000000000000",
+      (token.addresses[currentChainId] as `0x${string}`) ||
+        "0x0000000000000000000000000000000000000000",
+      token.decimals
+    );
 
   const balance = parsedUserCollateralBalance?.toString() || "0";
   const hasBalance = parseFloat(balance) > 0;
 
   // Find USDT token for conversion
-  const usdtToken = useMemo(() => tokens.find(t => t.symbol === "USDT"), []);
-  const usdtAddress = useMemo(() => 
-    usdtToken?.addresses[currentChainId] as `0x${string}`, 
+  const usdtToken = useMemo(() => tokens.find((t) => t.symbol === "USDT"), []);
+  const usdtAddress = useMemo(
+    () => usdtToken?.addresses[currentChainId] as `0x${string}`,
     [usdtToken, currentChainId]
   );
 
   // Only calculate exchange rate if we have balance and it's not USDT token
   const shouldFetchExchangeRate = Boolean(
-    hasBalance && 
-    poolAddress && 
-    token.addresses[currentChainId] && 
-    usdtAddress &&
-    token.symbol !== "USDT" // Don't convert USDT to USDT
+    hasBalance &&
+      poolAddress &&
+      token.addresses[currentChainId] &&
+      usdtAddress &&
+      token.symbol !== "USDT" // Don't convert USDT to USDT
   );
 
   // Get exchange rate for token to USDT conversion
-  const { 
-    parsedExchangeRate,
-    exchangeRateLoading 
-  } = useOptimizedExchangeRate(
-    (poolAddress as `0x${string}`) || "0x0000000000000000000000000000000000000000",
-    (token.addresses[currentChainId] as `0x${string}`) || "0x0000000000000000000000000000000000000000",
+  const { parsedExchangeRate, exchangeRateLoading } = useOptimizedExchangeRate(
+    (poolAddress as `0x${string}`) ||
+      "0x0000000000000000000000000000000000000000",
+    (token.addresses[currentChainId] as `0x${string}`) ||
+      "0x0000000000000000000000000000000000000000",
     usdtAddress || "0x0000000000000000000000000000000000000000",
     token.decimals,
     usdtToken?.decimals || 6,
@@ -205,12 +216,12 @@ const TokenBalanceItem = ({
       // If token is USDT, return the balance directly
       return hasBalance ? balance : "0";
     }
-    
+
     if (hasBalance && parsedExchangeRate > 0) {
       const result = (parseFloat(balance) * parsedExchangeRate).toFixed(6);
       return result;
     }
-    
+
     return "0";
   }, [hasBalance, balance, parsedExchangeRate, token.symbol]);
 
@@ -230,13 +241,13 @@ const TokenBalanceItem = ({
     }
   }, [onUsdtValueUpdate, token.symbol, usdtValue, hasBalance]);
 
-  // Show loading state or token with balance
-  if (userCollateralBalanceLoading || hasBalance) {
+  // Only show token if it has balance (don't show if still loading balance)
+  if (hasBalance) {
     return (
       <TokenBalanceRow
         token={token}
         balance={balance}
-        balanceLoading={userCollateralBalanceLoading}
+        balanceLoading={false} // Never show balance loading since we only render when hasBalance
         usdtValue={usdtValue}
         usdtValueLoading={exchangeRateLoading && token.symbol !== "USDT"}
         poolAddress={poolAddress}
@@ -245,12 +256,14 @@ const TokenBalanceItem = ({
     );
   }
 
-  // Don't render if no balance and not loading
+  // Don't render if no balance or still loading balance
   return null;
 };
 
-
-export const TokenBalanceTable = ({ selectedPool, onTotalUsdtUpdate }: TokenBalanceTableProps) => {
+export const TokenBalanceTable = ({
+  selectedPool,
+  onTotalUsdtUpdate,
+}: TokenBalanceTableProps) => {
   const [repayDialogOpen, setRepayDialogOpen] = useState(false);
   const [selectedToken, setSelectedToken] = useState<Token | null>(null);
   const [hasAnyBalance, setHasAnyBalance] = useState(false);
@@ -261,9 +274,11 @@ export const TokenBalanceTable = ({ selectedPool, onTotalUsdtUpdate }: TokenBala
   const { isConnected } = useAccount();
 
   // Check user position - if no position address, return early
-  const { userPosition, userPositionLoading, userPositionError } = useReadUserPosition(
-    (selectedPool?.lendingPool as `0x${string}`) || "0x0000000000000000000000000000000000000000"
-  );
+  const { userPosition, userPositionLoading, userPositionError } =
+    useReadUserPosition(
+      (selectedPool?.lendingPool as `0x${string}`) ||
+        "0x0000000000000000000000000000000000000000"
+    );
 
   // Get borrow balance for repay functionality
   const {
@@ -274,7 +289,6 @@ export const TokenBalanceTable = ({ selectedPool, onTotalUsdtUpdate }: TokenBala
       "0x0000000000000000000000000000000000000000",
     selectedPool?.borrowTokenInfo?.decimals || 18
   );
-
 
   // Filter tokens that are available on current chain
   const availableTokens = useMemo(() => {
@@ -328,13 +342,16 @@ export const TokenBalanceTable = ({ selectedPool, onTotalUsdtUpdate }: TokenBala
       // Update individual token values immediately
       setTokenUsdtValues((prev) => {
         const updated = { ...prev, [tokenSymbol]: usdtValue };
-        
+
         // Calculate total immediately from all token values
-        const newTotal = Object.values(updated).reduce((sum, value) => sum + value, 0);
-        
+        const newTotal = Object.values(updated).reduce(
+          (sum, value) => sum + value,
+          0
+        );
+
         // Update total immediately
         setTotalUsdtValue(newTotal);
-        
+
         return updated;
       });
     },
@@ -405,7 +422,6 @@ export const TokenBalanceTable = ({ selectedPool, onTotalUsdtUpdate }: TokenBala
                 {selectedPool.collateralTokenInfo?.symbol}
               </span>
             </div>
-            <span>/</span>
             <div className="flex items-center gap-1">
               <div className="w-4 h-4 rounded-full overflow-hidden">
                 {selectedPool.borrowTokenInfo?.logo ? (
@@ -455,7 +471,8 @@ export const TokenBalanceTable = ({ selectedPool, onTotalUsdtUpdate }: TokenBala
               Connect Wallet to View Balances
             </h3>
             <p className="text-gray-600 leading-relaxed">
-              Connect your wallet to view your token balances in this lending pool!
+              Connect your wallet to view your token balances in this lending
+              pool!
             </p>
             <p className="text-sm text-gray-500 mt-2">
               Beary is waiting for you!
@@ -464,12 +481,22 @@ export const TokenBalanceTable = ({ selectedPool, onTotalUsdtUpdate }: TokenBala
 
           {/* Connect Button */}
           <Button
-            onClick={() => window.location.href = '/profile'}
+            onClick={() => (window.location.href = "/profile")}
             className="bg-gradient-to-r from-orange-500 to-pink-500 hover:from-orange-600 hover:to-pink-600 text-white font-semibold py-3 px-6 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
           >
             <div className="flex items-center gap-2">
-              <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+              <svg
+                className="h-4 w-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"
+                />
               </svg>
               Connect Wallet
             </div>
@@ -480,7 +507,12 @@ export const TokenBalanceTable = ({ selectedPool, onTotalUsdtUpdate }: TokenBala
   }
 
   // If no position address found and not loading, show "no position" message
-  if (!userPositionLoading && !userPosition && !userPositionError && isConnected) {
+  if (
+    !userPositionLoading &&
+    !userPosition &&
+    !userPositionError &&
+    isConnected
+  ) {
     return (
       <Card className="bg-white/80 backdrop-blur-sm border border-sunset-orange shadow-xl">
         <CardHeader className="pb-3">

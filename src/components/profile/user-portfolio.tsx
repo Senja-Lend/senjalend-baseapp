@@ -2,11 +2,10 @@
 
 import React, { useState, useEffect, useMemo, memo } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { InlineSpinner } from "@/components/ui/spinner";
 import { PoolSelector } from "@/components/select/pools";
-import { TrendingUp, AlertTriangle, CheckCircle } from "lucide-react";
+import { AlertTriangle, TrendingUp } from "lucide-react";
 import { useAccount } from "wagmi";
 import {
   fetchLendingPools,
@@ -80,7 +79,35 @@ const PortfolioCollateralEquivalent = React.memo(
       return 0;
     }, [usdtValue, usdtToCollateralRate]);
 
-    if (isLoading) {
+    const [showLoading, setShowLoading] = React.useState(false);
+    const [showConverting, setShowConverting] = React.useState(false);
+
+    // Add delay before showing loading states
+    React.useEffect(() => {
+      if (isLoading) {
+        const timer = setTimeout(() => {
+          setShowLoading(true);
+        }, 2000); // Show loading after 2 seconds
+
+        return () => clearTimeout(timer);
+      } else {
+        setShowLoading(false);
+      }
+    }, [isLoading]);
+
+    React.useEffect(() => {
+      if (exchangeRateLoading) {
+        const timer = setTimeout(() => {
+          setShowConverting(true);
+        }, 2000); // Show converting after 2 seconds
+
+        return () => clearTimeout(timer);
+      } else {
+        setShowConverting(false);
+      }
+    }, [exchangeRateLoading]);
+
+    if (isLoading && showLoading) {
       return (
         <div className="flex items-center gap-2">
           <div className="w-4 h-4 border-2 border-gray-400 border-t-transparent rounded-full animate-spin"></div>
@@ -89,7 +116,7 @@ const PortfolioCollateralEquivalent = React.memo(
       );
     }
 
-    if (exchangeRateLoading) {
+    if (exchangeRateLoading && showConverting) {
       return (
         <div className="flex items-center gap-2">
           <div className="w-4 h-4 border-2 border-blue-400 border-t-transparent rounded-full animate-spin"></div>
@@ -246,21 +273,7 @@ export const UserPortfolio = memo(function UserPortfolio({
     return healthFactor;
   }, [healthFactor]);
 
-  const healthFactorStatus = useMemo(() => {
-    if (!overallHealthFactor)
-      return { status: "unknown", color: "gray", icon: AlertTriangle };
-
-    const hf = Number(overallHealthFactor) / 1e8; // Using 8 decimals as requested
-
-    // If health factor > 10, treat as infinity
-    if (hf > 10)
-      return { status: "infinity", color: "purple", icon: CheckCircle };
-    if (hf >= 1.5)
-      return { status: "healthy", color: "green", icon: CheckCircle };
-    if (hf >= 1.0)
-      return { status: "warning", color: "yellow", icon: AlertTriangle };
-    return { status: "danger", color: "red", icon: AlertTriangle };
-  }, [overallHealthFactor]);
+  // Removed health factor status categorization - only showing numeric value
 
   // Format health factor display
   const healthFactorDisplay = useMemo(() => {
@@ -431,30 +444,11 @@ export const UserPortfolio = memo(function UserPortfolio({
                 <div className="space-y-6 sm:space-y-0 sm:grid sm:grid-cols-2 sm:gap-8">
                   {/* Health Factor */}
                   <div className="text-center sm:text-left">
-                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 gap-2 sm:gap-0">
+                    <div className="mb-4">
                       <span className="font-semibold text-sm sm:text-base text-gray-800 flex items-center justify-center sm:justify-start gap-2">
                         <div className="w-2 h-2 bg-gradient-to-r from-orange-500 to-pink-500 rounded-full"></div>
                         Health Factor
                       </span>
-                      <Badge
-                        variant="outline"
-                        className={
-                          healthFactorStatus.status === "infinity"
-                            ? "border-purple-300 text-purple-800 bg-gradient-to-r from-purple-100 to-purple-200 shadow-sm self-center sm:self-auto"
-                            : healthFactorStatus.status === "healthy"
-                            ? "border-green-300 text-green-800 bg-gradient-to-r from-green-100 to-green-200 shadow-sm self-center sm:self-auto"
-                            : healthFactorStatus.status === "warning"
-                            ? "border-yellow-300 text-yellow-800 bg-gradient-to-r from-yellow-100 to-yellow-200 shadow-sm self-center sm:self-auto"
-                            : healthFactorStatus.status === "danger"
-                            ? "border-red-300 text-red-800 bg-gradient-to-r from-red-100 to-red-200 shadow-sm self-center sm:self-auto"
-                            : "border-gray-300 text-gray-800 bg-gradient-to-r from-gray-100 to-gray-200 shadow-sm self-center sm:self-auto"
-                        }
-                      >
-                        <healthFactorStatus.icon className="w-3 h-3 mr-1" />
-                        {healthFactorStatus.status === "infinity"
-                          ? "INFINITY"
-                          : healthFactorStatus.status.toUpperCase()}
-                      </Badge>
                     </div>
                     <div className="text-center sm:text-left">
                       <p className="text-md sm:text-xl font-semibold bg-gradient-to-r from-orange-600 to-pink-600 bg-clip-text text-transparent">

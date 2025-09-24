@@ -518,11 +518,15 @@ export const SwapInterface = memo(function SwapInterface({
                             ).toFixed(4)} ${toToken.symbol}`
                           : fromToken &&
                             toToken &&
+                            userPosition &&
+                            userPosition !== "0x0000000000000000000000000000000000000000" &&
                             exchangeRate &&
                             exchangeRate > 0
                           ? `1 ${fromToken.symbol} = ${exchangeRate.toFixed(
                               4
                             )} ${toToken.symbol}`
+                          : fromToken && toToken && userPosition && userPosition !== "0x0000000000000000000000000000000000000000"
+                          ? "Loading exchange rate..."
                           : fromToken && toToken
                           ? "Create position to see rate"
                           : "Select tokens"}

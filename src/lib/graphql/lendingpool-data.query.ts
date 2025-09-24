@@ -3,7 +3,7 @@ import { gql } from "graphql-request";
 export const queryLendingPool = () => {
   return gql`
     query MyQuery {
-      lendingPoolCreateds {
+      lendingPoolCreateds(where: { blockNumber_gt: "35954453" }) {
         id
         lendingPool
         borrowToken

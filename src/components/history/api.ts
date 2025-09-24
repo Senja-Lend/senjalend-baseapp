@@ -12,14 +12,18 @@ const API_URL = process.env.NEXT_PUBLIC_BASE_PONDER_URL || "";
 // Create GraphQL client
 const client = new GraphQLClient(API_URL);
 
+// Debug logging
+console.log("GraphQL API URL:", API_URL);
+
 // Transform GraphQL response to our Transaction type
 function transformGraphQLResponse(
   data: GraphQLTransactionResponse
 ): Transaction[] {
+  console.log("Received GraphQL data:", data);
   const transactions: Transaction[] = [];
 
   // Transform SupplyLiquidity transactions
-  data.supplyLiquiditys.items.forEach((tx) => {
+  data.supplyLiquidities.forEach((tx) => {
     transactions.push({
       id: tx.id,
       user: tx.user,
@@ -36,7 +40,7 @@ function transformGraphQLResponse(
   });
 
   // Transform WithdrawLiquidity transactions
-  data.withdrawLiquiditys.items.forEach((tx) => {
+  data.withdrawLiquidities.forEach((tx) => {
     transactions.push({
       id: tx.id,
       user: tx.user,
@@ -53,7 +57,7 @@ function transformGraphQLResponse(
   });
 
   // Transform SupplyCollateral transactions
-  data.supplyCollaterals.items.forEach((tx) => {
+  data.supplyCollaterals.forEach((tx) => {
     transactions.push({
       id: tx.id,
       user: tx.user,
@@ -82,17 +86,18 @@ export async function fetchUserTransactions(
   skip: number = 0
 ): Promise<Transaction[]> {
   try {
+    console.log("Fetching transactions for user:", userAddress);
     const data = await client.request<GraphQLTransactionResponse>(
       GET_USER_TRANSACTIONS,
       {
         user: userAddress.toLowerCase(),
-        first,
-        skip,
       }
     );
 
+    console.log("Raw GraphQL response:", data);
     return transformGraphQLResponse(data);
-  } catch {
+  } catch (error) {
+    console.error("Failed to fetch transaction history:", error);
     throw new Error("Failed to fetch transaction history");
   }
 }
@@ -104,14 +109,12 @@ export async function fetchAllTransactions(
   try {
     const data = await client.request<GraphQLTransactionResponse>(
       GET_ALL_TRANSACTIONS,
-      {
-        first,
-        skip,
-      }
+      {}
     );
 
     return transformGraphQLResponse(data);
-  } catch {
+  } catch (error) {
+    console.error("Failed to fetch transaction history:", error);
     throw new Error("Failed to fetch transaction history");
   }
 }
@@ -131,13 +134,17 @@ export function useTransactions(userAddress?: string) {
         // Only fetch transactions if userAddress is provided
         // This prevents showing all transactions when wallet is not connected
         if (userAddress) {
+          console.log("Loading transactions for user:", userAddress);
           const data = await fetchUserTransactions(userAddress);
+          console.log("Loaded transactions:", data);
           setTransactions(data);
         } else {
           // Clear transactions and stop loading when no user address
+          console.log("No user address provided, clearing transactions");
           setTransactions([]);
         }
       } catch (err) {
+        console.error("Error loading transactions:", err);
         setError(err instanceof Error ? err.message : "Unknown error occurred");
       } finally {
         setLoading(false);

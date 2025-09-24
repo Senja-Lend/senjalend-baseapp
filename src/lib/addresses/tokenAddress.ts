@@ -19,8 +19,8 @@ export const tokens: Token[] = [
     decimals: 18,
     oftAddress: "0x007F735Fd070DeD4B0B58D430c392Ff0190eC20F", 
     addresses: {
-      8453: "0x35487f37efb8F27f70e3A8Db62d04C1edfB69aE1",// mockWeth 0x4200000000000000000000000000000000000006 weth
-      10: "0x3870bFD5820994a560E3F1D9c98c7740D9E007B8", //mockWeth 0x4200000000000000000000000000000000000006 weth
+      8453: "0x4200000000000000000000000000000000000006", //weth
+      10: "0x4200000000000000000000000000000000000006",  //weth
     },
   },
   {
@@ -41,8 +41,8 @@ export const tokens: Token[] = [
     decimals: 6,
     oftAddress: "0xdF05e9AbF64dA281B3cBd8aC3581022eC4841FB2",
     addresses: {
-      8453: "0x9fc9E6332a4eD0b5a5C24602A0821A0e44189681", //mock usdt 0xfde4C96c8593536E31F229EA8f37b2ADa2699bb2 usdt
-      10: "0x6A58615739b0FC710E6A380E893E672968E30B5F", //mock usdt 0x94b008aA00579c1307B0EF2c499aD98a8ce58e58 usdt
+      8453: "0xfde4C96c8593536E31F229EA8f37b2ADa2699bb2", //usdt
+      10: "0x94b008aA00579c1307B0EF2c499aD98a8ce58e58", // usdt
     },
   },
   {
@@ -52,7 +52,7 @@ export const tokens: Token[] = [
     decimals: 6,
     oftAddress: "0xdF05e9AbF64dA281B3cBd8aC3581022eC4841FB2",
     addresses: {
-      8453: "0x735886f4EE69FFe3c7a156e8584B46748eDdB388", //mock usdc 0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913 usdc
+      8453: "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",//usdc
       10: "0xfBC915dc39654b52B2E9284FB966C79A1071eA3A",
     },
   },

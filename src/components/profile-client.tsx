@@ -3,17 +3,18 @@ import { useState, useCallback, memo } from "react";
 import Image from "next/image";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Lock, CreditCard, Copy } from "lucide-react";
 import { UserPortfolio } from "./profile/user-portfolio";
 import { useAccount, useBalance, useDisconnect } from "wagmi";
 import ButtonConnectWallet from "./button/button-connect-wallet";
+import { useChainModal } from "@rainbow-me/rainbowkit";
 
 const ProfileClient = memo(function ProfileClient() {
   // RainbowKit hooks
-  const { address, isConnected } = useAccount();
+  const { address, isConnected, chain } = useAccount();
   const { data: balance } = useBalance({ address });
   const { disconnect } = useDisconnect();
+  const { openChainModal } = useChainModal();
 
   const [copied, setCopied] = useState(false);
 
@@ -66,13 +67,17 @@ const ProfileClient = memo(function ProfileClient() {
                 Wallet Connection
               </CardTitle>
               {isConnected && (
-                <Badge
-                  variant="default"
-                  className="bg-orange-50 text-green-600 border border-orange-200 self-start sm:self-auto"
+                <Button
+                  onClick={openChainModal}
+                  className="bg-orange-50 text-green-600 border border-orange-200 self-start sm:self-auto hover:bg-orange-100 transition-colors"
                 >
-                  <div className="w-2 h-2 bg-sunset-orange rounded-full mr-2"></div>
-                  Connected
-                </Badge>
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                    <span className="font-medium font-mono text-gray-700">
+                      {chain?.name}
+                    </span>
+                  </div>
+                </Button>
               )}
             </div>
           </CardHeader>
@@ -121,11 +126,11 @@ const ProfileClient = memo(function ProfileClient() {
                   <div className="border-t border-orange-200 pt-3">
                     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                       <div className="flex-1">
-                        <p className="text-xs sm:text-sm text-gray-600">
+                        <p className="text-xs sm:text-sm text-gray-600 font-mono">
                           Balance
                         </p>
                         {balance ? (
-                          <p className="text-base sm:text-lg font-semibold text-gray-900">
+                          <p className="text-base sm:text-md font-mono text-gray-900">
                             {parseFloat(balance.formatted).toFixed(4)}{" "}
                             {balance.symbol}
                           </p>

@@ -29,7 +29,7 @@ const ButtonConnectWallet = () => {
               <button
                 onClick={openConnectModal}
                 type="button"
-                className="flex items-center justify-center space-x-1.5 px-6 py-1.5 rounded-lg bg-[#ff9306] text-white font-medium transition-all hover:opacity-90 hover:scale-[1.02] active:scale-[0.98] w-full"
+                className="flex items-center justify-center space-x-1.5 px-6 py-1.5 rounded-lg bg-[#ff5d06] text-white font-medium transition-all hover:opacity-90 hover:scale-[1.02] active:scale-[0.98] w-full"
               >
                 <span>Connect Wallet</span>
               </button>
@@ -56,7 +56,7 @@ const ButtonConnectWallet = () => {
               <button
                 onClick={openChainModal}
                 type="button"
-                className="flex items-center justify-center space-x-1 px-3 py-1.5 rounded-lg bg-[#ff9306] text-white hover:opacity-90 font-medium transition-all"
+                className="flex items-center justify-center space-x-1 px-3 py-1.5 rounded-lg bg-[#ff5d06] text-white hover:opacity-90 font-medium transition-all"
               >
                 {chain.hasIcon && chain.iconUrl && (
                   <img
