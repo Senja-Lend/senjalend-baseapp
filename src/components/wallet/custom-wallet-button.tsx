@@ -2,7 +2,8 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
-import { useAccount, useConnect, useDisconnect, useBalance } from "wagmi";
+import { useAccount, useDisconnect, useBalance } from "wagmi";
+import { Wallet, ConnectWallet } from "@coinbase/onchainkit/wallet";
 import { Button } from "@/components/ui/button";
 import { 
   DropdownMenu, 
@@ -11,7 +12,7 @@ import {
   DropdownMenuTrigger,
   DropdownMenuSeparator 
 } from "@/components/ui/dropdown-menu";
-import { Copy, Wallet, LogOut, ExternalLink } from "lucide-react";
+import { Copy, Wallet as WalletIcon, LogOut, ExternalLink } from "lucide-react";
 import { formatEther } from "viem";
 
 interface CustomWalletButtonProps {
@@ -30,7 +31,6 @@ export const CustomWalletButton: React.FC<CustomWalletButtonProps> = ({
   theme = "default"
 }) => {
   const { address, isConnected, chain } = useAccount();
-  const { connect, connectors } = useConnect();
   const { disconnect } = useDisconnect();
   const { data: balance } = useBalance({ address });
   const [copied, setCopied] = useState(false);
@@ -76,13 +76,14 @@ export const CustomWalletButton: React.FC<CustomWalletButtonProps> = ({
 
   if (!isConnected) {
     return (
-      <Button
-        onClick={() => connect({ connector: connectors[0] })}
-        className={`${themeClasses.connect} ${className}`}
-      >
-        <Wallet className="w-4 h-4 mr-2" />
-        {connectButtonText}
-      </Button>
+      <Wallet>
+        <ConnectWallet 
+          className={`${themeClasses.connect} ${className}`}
+          disconnectedLabel={connectButtonText}
+        >
+          <WalletIcon className="w-4 h-4 mr-2" />
+        </ConnectWallet>
+      </Wallet>
     );
   }
 
