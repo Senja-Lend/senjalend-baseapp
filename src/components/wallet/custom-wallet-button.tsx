@@ -3,7 +3,6 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { useAccount, useDisconnect, useBalance } from "wagmi";
-import { Wallet, ConnectWallet } from "@coinbase/onchainkit/wallet";
 import { Button } from "@/components/ui/button";
 import { 
   DropdownMenu, 
@@ -14,6 +13,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Copy, Wallet as WalletIcon, LogOut, ExternalLink } from "lucide-react";
 import { formatEther } from "viem";
+import { WalletConnectDialog } from "./wallet-connect-dialog";
 
 interface CustomWalletButtonProps {
   className?: string;
@@ -55,19 +55,19 @@ export const CustomWalletButton: React.FC<CustomWalletButtonProps> = ({
         return {
           connect: "bg-gradient-to-r from-orange-500 to-pink-500 hover:from-orange-600 hover:to-pink-600 text-white",
           connected: "bg-gradient-to-r from-orange-500 to-pink-500 hover:from-orange-600 hover:to-pink-600 text-white",
-          dropdown: "bg-white border border-gray-200 shadow-lg"
+          dropdown: "bg-white/95 backdrop-blur-sm border border-orange-200 shadow-2xl"
         };
       case "blue":
         return {
           connect: "bg-blue-600 hover:bg-blue-700 text-white",
           connected: "bg-blue-600 hover:bg-blue-700 text-white",
-          dropdown: "bg-white border border-gray-200 shadow-lg"
+          dropdown: "bg-white/95 backdrop-blur-sm border border-orange-200 shadow-2xl"
         };
       default:
         return {
           connect: "bg-gray-900 hover:bg-gray-800 text-white",
           connected: "bg-gray-900 hover:bg-gray-800 text-white",
-          dropdown: "bg-white border border-gray-200 shadow-lg"
+          dropdown: "bg-white/95 backdrop-blur-sm border border-orange-200 shadow-2xl"
         };
     }
   };
@@ -76,14 +76,11 @@ export const CustomWalletButton: React.FC<CustomWalletButtonProps> = ({
 
   if (!isConnected) {
     return (
-      <Wallet>
-        <ConnectWallet 
-          className={`${themeClasses.connect} ${className}`}
-          disconnectedLabel={connectButtonText}
-        >
-          <WalletIcon className="w-4 h-4 mr-2" />
-        </ConnectWallet>
-      </Wallet>
+      <WalletConnectDialog
+        className={className}
+        connectButtonText={connectButtonText}
+        theme={theme}
+      />
     );
   }
 
@@ -120,7 +117,7 @@ export const CustomWalletButton: React.FC<CustomWalletButtonProps> = ({
       
       <DropdownMenuContent className={`w-64 ${themeClasses.dropdown}`} align="end">
         {/* Wallet Info */}
-        <div className="px-3 py-2 border-b border-gray-100">
+        <div className="px-3 py-2 border-b border-white/20">
           <div className="flex items-center space-x-3">
             <div className="w-10 h-10 rounded-full overflow-hidden">
               <Image
@@ -132,10 +129,10 @@ export const CustomWalletButton: React.FC<CustomWalletButtonProps> = ({
               />
             </div>
             <div className="flex-1 min-w-0">
-              <div className="text-sm font-medium text-gray-900 truncate">
+              <div className="text-sm font-medium text-gray-800 truncate">
                 {showAddress && address ? formatAddress(address) : "Connected"}
               </div>
-              <div className="text-xs text-gray-500">
+              <div className="text-xs text-gray-700">
                 {chain?.name || "Unknown Network"}
               </div>
             </div>
@@ -144,9 +141,9 @@ export const CustomWalletButton: React.FC<CustomWalletButtonProps> = ({
 
         {/* Balance */}
         {showBalance && balance && (
-          <div className="px-3 py-2 border-b border-gray-100">
-            <div className="text-sm text-gray-600">Balance</div>
-            <div className="text-lg font-semibold text-gray-900">
+          <div className="px-3 py-2 border-b border-white/20">
+            <div className="text-sm text-white/70">Balance</div>
+            <div className="text-lg font-semibold text-white">
               {parseFloat(formatEther(balance.value)).toFixed(4)} ETH
             </div>
           </div>
@@ -157,7 +154,7 @@ export const CustomWalletButton: React.FC<CustomWalletButtonProps> = ({
           {showAddress && address && (
             <DropdownMenuItem
               onClick={() => copyToClipboard(address)}
-              className="flex items-center space-x-2 cursor-pointer"
+              className="flex items-center space-x-2 cursor-pointer !text-gray-900 hover:!text-orange-700 hover:!bg-orange-50 focus:!text-orange-700 focus:!bg-orange-50"
             >
               <Copy className="w-4 h-4" />
               <span>{copied ? "Copied!" : "Copy Address"}</span>
@@ -165,20 +162,20 @@ export const CustomWalletButton: React.FC<CustomWalletButtonProps> = ({
           )}
           
           <DropdownMenuItem
-            onClick={() => window.open("https://keys.coinbase.com", "_blank")}
-            className="flex items-center space-x-2 cursor-pointer"
+            onClick={() => window.open("https://basescan.org/address/" + address, "_blank")}
+            className="flex items-center space-x-2 cursor-pointer !text-gray-900 hover:!text-orange-700 hover:!bg-orange-50 focus:!text-orange-700 focus:!bg-orange-50"
           >
-            <ExternalLink className="w-4 h-4" />
-            <span>Wallet Settings</span>
+            <ExternalLink className="w-4 h-4 text-gray-900" />
+            <span>View on Explorer</span>
           </DropdownMenuItem>
           
-          <DropdownMenuSeparator />
+          <DropdownMenuSeparator className="bg-white/20" />
           
           <DropdownMenuItem
             onClick={() => disconnect()}
-            className="flex items-center space-x-2 cursor-pointer text-red-600 hover:text-red-700"
+            className="flex items-center space-x-2 cursor-pointer !text-red-400 hover:!text-red-400 hover:!bg-red-400/20 focus:!text-red-400 focus:!bg-red-400/20"
           >
-            <LogOut className="w-4 h-4" />
+            <LogOut className="w-4 h-4 text-gray-600" />
             <span>Disconnect</span>
           </DropdownMenuItem>
         </div>

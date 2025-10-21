@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useCallback, memo } from "react";
+import Image from "next/image";
 import { useAccount, useSwitchChain } from "wagmi";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -95,18 +96,22 @@ export const WalletConnectionGuard = memo(function WalletConnectionGuard({
               <div className="flex items-center gap-3">
                 <div className="flex items-center">
                   <div className="w-8 h-8 rounded-full border-2 border-white shadow-sm overflow-hidden">
-                    <img
+                    <Image
                       src={
                         pool.collateralTokenInfo?.logo || "/token/kaia-logo.svg"
                       }
                       alt={pool.collateralTokenInfo?.symbol || "Token"}
+                      width={32}
+                      height={32}
                       className="w-full h-full object-cover"
                     />
                   </div>
                   <div className="w-8 h-8 rounded-full border-2 border-white shadow-sm overflow-hidden -ml-2">
-                    <img
+                    <Image
                       src={pool.borrowTokenInfo?.logo || "/token/kaia-logo.svg"}
                       alt={pool.borrowTokenInfo?.symbol || "Token"}
+                      width={32}
+                      height={32}
                       className="w-full h-full object-cover"
                     />
                   </div>

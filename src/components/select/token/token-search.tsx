@@ -10,23 +10,26 @@ import { useCurrentChainId } from "@/lib/chain";
 import { BearyNotFound } from "@/components/search/beary-not-found";
 
 // Component to display token balance
-const TokenBalance = memo(function TokenBalance({ 
-  token, 
+const TokenBalance = memo(function TokenBalance({
+  token,
   poolAddress,
-}: { 
-  token: Token; 
+}: {
+  token: Token;
   poolAddress?: string;
   isCollateralBalance?: boolean;
 }) {
   const currentChainId = useCurrentChainId();
   const [showLoading, setShowLoading] = React.useState(false);
-  
+
   // Always use collateral balance from position for both "from" and "to" tokens
-  const { parsedUserCollateralBalance, userCollateralBalanceLoading } = useReadUserCollateralBalance(
-    poolAddress as `0x${string}` || "0x0000000000000000000000000000000000000000",
-    token.addresses[currentChainId] as `0x${string}` || "0x0000000000000000000000000000000000000000",
-    token.decimals
-  );
+  const { parsedUserCollateralBalance, userCollateralBalanceLoading } =
+    useReadUserCollateralBalance(
+      (poolAddress as `0x${string}`) ||
+        "0x0000000000000000000000000000000000000000",
+      (token.addresses[currentChainId] as `0x${string}`) ||
+        "0x0000000000000000000000000000000000000000",
+      token.decimals
+    );
 
   const balance = parsedUserCollateralBalance;
   const isLoading = userCollateralBalanceLoading;
@@ -87,33 +90,36 @@ export const TokenSearch = memo(function TokenSearch({
 }: TokenSearchProps) {
   const [searchQuery, setSearchQuery] = useState("");
 
-  const availableTokens = tokens.filter(
-    (token) => {
-      // Filter out KAIA tokens
-      if (token.symbol === "KAIA" || token.symbol === "WKAI") {
-        return false;
-      }
-      
-      // Filter out the other token if it exists
-      if (otherToken && token.symbol === otherToken.symbol) {
-        return false;
-      }
-      
-      // Apply search filter
-      if (searchQuery) {
-        const query = searchQuery.toLowerCase();
-        return token.symbol.toLowerCase().includes(query) ||
-               token.name.toLowerCase().includes(query);
-      }
-      
-      return true;
+  const availableTokens = tokens.filter((token) => {
+    // Filter out KAIA tokens
+    if (token.symbol === "KAIA" || token.symbol === "WKAI") {
+      return false;
     }
-  );
 
-  const handleTokenSelect = useCallback((token: Token) => {
-    onTokenSelect(token);
-    setSearchQuery("");
-  }, [onTokenSelect]);
+    // Filter out the other token if it exists
+    if (otherToken && token.symbol === otherToken.symbol) {
+      return false;
+    }
+
+    // Apply search filter
+    if (searchQuery) {
+      const query = searchQuery.toLowerCase();
+      return (
+        token.symbol.toLowerCase().includes(query) ||
+        token.name.toLowerCase().includes(query)
+      );
+    }
+
+    return true;
+  });
+
+  const handleTokenSelect = useCallback(
+    (token: Token) => {
+      onTokenSelect(token);
+      setSearchQuery("");
+    },
+    [onTokenSelect]
+  );
 
   const handleClearSearch = useCallback(() => {
     setSearchQuery("");
@@ -174,17 +180,20 @@ export const TokenSearch = memo(function TokenSearch({
             {popularTokens.map((symbol) => {
               const token = tokens.find((t) => t.symbol === symbol);
               // Filter out the other token if it exists
-              if (!token || (otherToken && token.symbol === otherToken.symbol)) {
+              if (
+                !token ||
+                (otherToken && token.symbol === otherToken.symbol)
+              ) {
                 return null;
               }
 
               return (
-              <button
-                type="button"
-                key={symbol}
-                onClick={() => handleTokenSelect(token)}
-                className="h-8 px-3 bg-sunset-purple-light hover:bg-sunset-pink-light border border-sunset-purple/20 hover:border-sunset-pink/30 hover:shadow-md hover:shadow-sunset-pink/20 hover:scale-105 transition-all duration-300 group rounded-lg"
-              >
+                <button
+                  type="button"
+                  key={symbol}
+                  onClick={() => handleTokenSelect(token)}
+                  className="h-8 px-3 bg-sunset-purple-light hover:bg-sunset-pink-light border border-sunset-purple/20 hover:border-sunset-pink/30 hover:shadow-md hover:shadow-sunset-pink/20 hover:scale-105 transition-all duration-300 group rounded-lg"
+                >
                   <div className="flex items-center space-x-2">
                     <div className="w-4 h-4 rounded-full overflow-hidden">
                       <Image
@@ -196,7 +205,6 @@ export const TokenSearch = memo(function TokenSearch({
                         onError={(e) => {
                           e.currentTarget.style.display = "none";
                           const fallback = e.currentTarget
-                             
                             .nextElementSibling as HTMLElement;
                           if (fallback) {
                             fallback.classList.remove("hidden");
@@ -226,9 +234,10 @@ export const TokenSearch = memo(function TokenSearch({
             <BearyNotFound
               searchQuery={searchQuery}
               title="No Tokens Found"
-              description={searchQuery 
-                ? `No tokens found matching "${searchQuery}". Try searching with different keywords.`
-                : "No tokens are available. Try refreshing or switching networks."
+              description={
+                searchQuery
+                  ? `No tokens found matching "${searchQuery}". Try searching with different keywords.`
+                  : "No tokens are available. Try refreshing or switching networks."
               }
               onRetry={() => setSearchQuery("")}
               onClearSearch={handleClearSearch}
@@ -254,7 +263,6 @@ export const TokenSearch = memo(function TokenSearch({
                       onError={(e) => {
                         e.currentTarget.style.display = "none";
                         const fallback = e.currentTarget
-                           
                           .nextElementSibling as HTMLElement;
                         if (fallback) {
                           fallback.classList.remove("hidden");
@@ -276,9 +284,11 @@ export const TokenSearch = memo(function TokenSearch({
                   </div>
                 </div>
                 {showBalance && (
-                  <TokenBalance 
-                    token={token} 
-                    poolAddress={isCollateralBalance ? selectedPoolAddress : undefined}
+                  <TokenBalance
+                    token={token}
+                    poolAddress={
+                      isCollateralBalance ? selectedPoolAddress : undefined
+                    }
                     isCollateralBalance={isCollateralBalance}
                   />
                 )}

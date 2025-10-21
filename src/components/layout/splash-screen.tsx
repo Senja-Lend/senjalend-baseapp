@@ -165,7 +165,7 @@ export default function SplashScreen({
         style={{ animationDelay: "1s" }}
       >
         <p className="text-white/80 text-sm font-medium tracking-wide">
-          Powered by Kaia
+          Powered by Layer Zero
         </p>
       </div>
     </div>

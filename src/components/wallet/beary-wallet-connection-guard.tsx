@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useCallback, memo } from "react";
+import Image from "next/image";
 import { useAccount, useSwitchChain } from "wagmi";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -94,9 +95,11 @@ export const BearyWalletConnectionGuard = memo(
             <div className="flex justify-center">
               <div className="relative">
                 <div className="w-24 h-24 relative">
-                  <img
+                  <Image
                     src="/beary/beary-wallet.png"
                     alt="Beary with wallet"
+                    width={96}
+                    height={96}
                     className="w-full h-full object-contain animate-bounce"
                   />
                 </div>

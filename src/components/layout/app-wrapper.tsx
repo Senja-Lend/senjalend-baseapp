@@ -1,9 +1,9 @@
 "use client";
 import React from "react";
 import { useState, useEffect } from "react";
+import SplashScreen from "./splash-screen";
 import { splashUtils } from "@/utils/splash";
 import { ChainProvider } from "@/lib/chain";
-import SplashScreen from "./layout/splash-screen";
 
 interface AppWrapperProps {
   children: React.ReactNode;
@@ -42,5 +42,9 @@ export default function AppWrapper({ children }: AppWrapperProps) {
   }
 
   // Show main app content
-  return <ChainProvider>{children}</ChainProvider>;
+  return (
+    <ChainProvider>
+      {children}
+    </ChainProvider>
+  );
 }

@@ -67,7 +67,7 @@ export const CreatePoolDialog = memo(function CreatePoolDialog({
   }, []);
 
   // Check if wallet is connected and on correct chain
-  const isOnTargetChain = chainId === 8453; // Kaia chain ID
+  const isOnTargetChain = chainId === 8453; // Base chain ID
   const isWalletReady = isConnected && isOnTargetChain;
 
   // Form validation

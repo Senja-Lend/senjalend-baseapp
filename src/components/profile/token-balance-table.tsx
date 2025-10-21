@@ -267,12 +267,12 @@ export const SwapTokenBalanceTable = React.memo(function SwapTokenBalanceTable({
         token.addresses[currentChainId] &&
         token.addresses[currentChainId] !==
           "0x0000000000000000000000000000000000000000" &&
-        token.symbol !== "KAIA" // Exclude native KAIA token
+        token.symbol !== "ETH" // Exclude native Base token
     );
     
     // Prioritize common tokens that are more likely to have balances
     // Order by likelihood of having balance: USDT > USDC > WETH > others
-    const priorityOrder = ["USDT", "USDC", "WETH", "WBTC", "WKAIA"];
+    const priorityOrder = ["USDT", "USDC", "WETH", "WBTC",];
     const sorted = filtered.sort((a, b) => {
       const aIndex = priorityOrder.indexOf(a.symbol);
       const bIndex = priorityOrder.indexOf(b.symbol);
@@ -328,8 +328,6 @@ export const SwapTokenBalanceTable = React.memo(function SwapTokenBalanceTable({
     // Fallback estimation based on historical rates (can be updated)
     if (totalUsdtValue > 0 && showTimeoutFallback) {
       const fallbackRates: Record<string, number> = {
-        'WKAIA': 0.15, // 1 USDT ≈ 0.15 WKAIA (estimate)
-        'KAIA': 0.15,
         'ETH': 0.0003, // 1 USDT ≈ 0.0003 ETH (estimate)
         'BTC': 0.000015, // 1 USDT ≈ 0.000015 BTC (estimate)
       };
@@ -463,9 +461,11 @@ export const SwapTokenBalanceTable = React.memo(function SwapTokenBalanceTable({
           <div className="flex justify-center mb-6">
             <div className="relative">
               <div className="w-20 h-20 relative">
-                <img
+                <Image
                   src="/beary/beary-wallet.png"
                   alt="Beary with wallet"
+                  width={80}
+                  height={80}
                   className="w-full h-full object-contain animate-bounce"
                 />
               </div>

@@ -1,10 +1,8 @@
+import "@/styles/globals.css";
 import { headers } from "next/headers";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import "@/styles/globals.css";
-import "@coinbase/onchainkit/styles.css";
 import { Providers } from "./providers";
-import AuroraBackground from "@/components/aurora-ui";
 import AppWrapper from "@/components/app-wrapper";
 import SenjaHeader from "@/components/header/senja-header";
 import { BottomNavigation } from "@/components/navbar";
@@ -58,15 +56,12 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} bg-root antialiased min-h-screen bg-gradient-to-br from-senja-background via-senja-cream/30 to-senja-cream-light/40`}
+        className={`font-sans bg-root min-h-screen ${geistSans.variable} ${geistMono.variable}`}
       >
-        <AuroraBackground />
         <AppWrapper>
           <Providers initialState={initialState}>
             <SenjaHeader />
-            <div className="pt-20">
-              {children}
-            </div>
+            <div className="pt-20">{children}</div>
             <div className="mt-6">
               <BottomNavigation />
             </div>

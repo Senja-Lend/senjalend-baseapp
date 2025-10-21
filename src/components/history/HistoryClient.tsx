@@ -30,7 +30,7 @@ const HistoryClient = memo(function HistoryClient() {
 
     // Then filter out transactions with unknown token addresses
     filtered = filtered.filter((tx) => {
-      const token = getTokenByAddress(tx.asset, 8453); // Use Kaia chain ID
+      const token = getTokenByAddress(tx.asset, 8453); // Use Base chain ID
       return token !== null;
     });
 

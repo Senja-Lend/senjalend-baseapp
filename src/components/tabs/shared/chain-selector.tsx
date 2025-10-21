@@ -17,7 +17,7 @@ interface ChainSelectorProps {
   disabled?: boolean;
 }
 
-export const ChainSelector = ({
+export const CrossChainSelector = ({
   chainFrom,
   chainTo,
   onChainToChange,

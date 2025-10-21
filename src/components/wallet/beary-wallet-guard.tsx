@@ -1,6 +1,7 @@
 "use client";
 
 import React, { memo } from 'react';
+import Image from 'next/image'; 
 import { useAccount } from 'wagmi';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
@@ -49,9 +50,11 @@ export const BearyWalletGuard = memo(function BearyWalletGuard({
       {/* Beary Wallet Image */}
       <div className="mb-6 relative">
         <div className="w-32 h-32 mx-auto relative">
-          <img
+          <Image
             src="/beary/beary-wallet.png"
             alt="Beary with wallet"
+            width={128}
+            height={128}
             className="w-full h-full object-contain animate-bounce"
           />
         </div>

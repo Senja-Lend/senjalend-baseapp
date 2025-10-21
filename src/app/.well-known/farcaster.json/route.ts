@@ -23,7 +23,6 @@ export async function GET() {
   const FARCASTER_HEADER = process.env.FARCASTER_HEADER;
   const FARCASTER_PAYLOAD = process.env.FARCASTER_PAYLOAD;
   const FARCASTER_SIGNATURE = process.env.FARCASTER_SIGNATURE;
-  const ALLOWED_ADDRESSES = process.env.ALLOWED_ADDRESSES;
 
   return Response.json({
     accountAssociation: {
@@ -33,7 +32,7 @@ export async function GET() {
     },
     frame: {
       name: PROJECT_NAME,
-      homeUrl: URL || "https://senja-fi.vercel.app",
+      homeUrl: URL || "https://senja-land.vercel.app",
       iconUrl: APP_HERO_IMAGE || `${URL}/senja-logo.png`,
       version: "1",
       imageUrl: APP_HERO_IMAGE || `${URL}/senja-logo.png`,
@@ -43,10 +42,10 @@ export async function GET() {
       splashImageUrl: SPLASH_IMAGE || `${URL}/senja-logo.png`,
       primaryCategory: "finance",
       splashBackgroundColor: SPLASH_BACKGROUND_COLOR,
+      tags: ["finance"],
     },
-
     baseBuilder: {
-      allowedAddresses: ALLOWED_ADDRESSES,
+      allowedAddresses: ["0xDCde6D1373e56a262DD06bf37572562D055d9888"],
     },
   });
 }

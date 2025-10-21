@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useMemo, useCallback } from "react";
+import Image from "next/image";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { LendingPoolWithTokens } from "@/lib/graphql/lendingpool-list.fetch";
@@ -14,7 +15,6 @@ import { formatLargeNumber } from "@/utils/format";
 import { tokens } from "@/lib/addresses/tokenAddress";
 import { Token } from "@/types";
 import { useAccount } from "wagmi";
-import Image from "next/image";
 
 interface TokenBalanceTableProps {
   selectedPool: LendingPoolWithTokens | null;
@@ -452,9 +452,11 @@ export const TokenBalanceTable = ({
           <div className="flex justify-center mb-6">
             <div className="relative">
               <div className="w-20 h-20 relative">
-                <img
+                <Image
                   src="/beary/beary-wallet.png"
                   alt="Beary with wallet"
+                  width={80}
+                  height={80}
                   className="w-full h-full object-contain animate-bounce"
                 />
               </div>

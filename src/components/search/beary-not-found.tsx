@@ -1,6 +1,7 @@
 "use client";
 
 import React from 'react';
+import Image from 'next/image';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Search, RefreshCw } from 'lucide-react';
@@ -44,9 +45,11 @@ export const BearyNotFound = ({
         {/* Beary Not Found Image */}
         <div className="flex justify-center mb-6">
           <div className="w-24 h-24 relative">
-            <img
+            <Image
               src="/beary/beary-not-found.png"
               alt="Beary not found"
+              width={96}
+              height={96}
               className="w-full h-full object-contain animate-bounce"
             />
           </div>

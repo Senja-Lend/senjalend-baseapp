@@ -38,7 +38,6 @@ export function formatTokenAmount(amount: bigint, decimals: number): string {
   // Format with appropriate decimal places based on token decimals
   // For tokens with 6 decimals (like USDT), show up to 6 decimal places
   // For tokens with 8 decimals (like WBTC), show up to 8 decimal places
-  // For tokens with 18 decimals (like WETH, WKAIA), show up to 6 decimal places for readability
   const maxDecimals = decimals <= 6 ? decimals : Math.min(decimals, 6);
   const formattedFractional = trimmedFractional.length > maxDecimals 
     ? trimmedFractional.substring(0, maxDecimals) 

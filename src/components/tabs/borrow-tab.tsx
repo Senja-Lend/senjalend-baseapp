@@ -5,7 +5,7 @@ import { formatUnits } from "viem";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { PoolInfoCard } from "./shared/pool-info-card";
-import { ChainSelector } from "./shared/chain-selector";
+import { CrossChainSelector } from "./shared/chain-selector";
 import { AmountInput } from "./shared/amount-input";
 import { SuccessAlert } from "@/components/alert/success-alert";
 import { FailedAlert } from "@/components/alert/failed-alert";
@@ -203,7 +203,7 @@ const BorrowTab = ({ pool }: BorrowTabProps) => {
         <Card className="p-4 bg-gradient-to-br from-orange-50 to-pink-50 border-2 border-orange-200 rounded-lg shadow-lg">
           <div className="space-y-4">
             {/* Chain Selection */}
-            <ChainSelector
+            <CrossChainSelector
               chainFrom={chainFrom}
               chainTo={chainTo}
               onChainToChange={setChainTo}
