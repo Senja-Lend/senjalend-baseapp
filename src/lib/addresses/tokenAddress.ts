@@ -19,7 +19,7 @@ export const tokens: Token[] = [
     decimals: 18,
     oftAddress: "0x007F735Fd070DeD4B0B58D430c392Ff0190eC20F", 
     addresses: {
-      8453: "0x4200000000000000000000000000000000000006", //weth
+      8453: "0x7954270F038BFaE7760cCF8D9094745d3E9cf4A3", //Mweth
       10: "0x4200000000000000000000000000000000000006",  //weth
     },
   },
@@ -41,7 +41,7 @@ export const tokens: Token[] = [
     decimals: 6,
     oftAddress: "0xdF05e9AbF64dA281B3cBd8aC3581022eC4841FB2",
     addresses: {
-      8453: "0xfde4C96c8593536E31F229EA8f37b2ADa2699bb2", //usdt
+      8453: "0xd61F31154bF292c7bE2fD81fAc9810f6d93Ecc2B", //Musdt
       10: "0x94b008aA00579c1307B0EF2c499aD98a8ce58e58", // usdt
     },
   },
@@ -52,10 +52,10 @@ export const tokens: Token[] = [
     decimals: 6,
     oftAddress: "0xdF05e9AbF64dA281B3cBd8aC3581022eC4841FB2",
     addresses: {
-      8453: "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",//usdc
+      8453: "0xD2E0F459A2518b9459B9b11dB5Aa014F0BF622A7",//usdc
       10: "0xfBC915dc39654b52B2E9284FB966C79A1071eA3A",
     },
   },
 ];
 
-export const helperAddress = "0xad15249b77d9Bf9a02401b8122FC763fD7391329";
+export const helperAddress = "0x8a0AB3999e64942E3A0A3227a5914319A7788253";

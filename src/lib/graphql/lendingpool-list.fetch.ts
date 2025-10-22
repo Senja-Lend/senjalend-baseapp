@@ -20,30 +20,37 @@ export type LendingPoolWithTokens = LendingPoolCreated & {
 // Helper function to find token by address
 function findTokenByAddress(address: string, chainId?: number): Token | null {
   const normalizedAddress = normalizeAddress(address);
-  
+
   if (!normalizedAddress) {
     return null;
   }
-  
+
   // If chainId is provided, search only in that chain
   if (chainId) {
-    return tokens.find(token => {
-      const tokenAddress = normalizeAddress(token.addresses[chainId]);
-      return tokenAddress === normalizedAddress;
-    }) || null;
-  }
-  
-  // If no chainId provided, search across all chains
-  return tokens.find(token => {
-    return Object.values(token.addresses).some(addr => 
-      normalizeAddress(addr) === normalizedAddress
+    return (
+      tokens.find((token) => {
+        const tokenAddress = normalizeAddress(token.addresses[chainId]);
+        return tokenAddress === normalizedAddress;
+      }) || null
     );
-  }) || null;
+  }
+
+  // If no chainId provided, search across all chains
+  return (
+    tokens.find((token) => {
+      return Object.values(token.addresses).some(
+        (addr) => normalizeAddress(addr) === normalizedAddress
+      );
+    }) || null
+  );
 }
 
 // Function to pair lending pools with token metadata
-export function pairLendingPoolsWithTokens(pools: LendingPoolCreated[], chainId?: number): LendingPoolWithTokens[] {
-  return pools.map(pool => ({
+export function pairLendingPoolsWithTokens(
+  pools: LendingPoolCreated[],
+  chainId?: number
+): LendingPoolWithTokens[] {
+  return pools.map((pool) => ({
     ...pool,
     borrowTokenInfo: findTokenByAddress(pool.borrowToken, chainId),
     collateralTokenInfo: findTokenByAddress(pool.collateralToken, chainId),
@@ -53,28 +60,28 @@ export function pairLendingPoolsWithTokens(pools: LendingPoolCreated[], chainId?
 export async function fetchLendingPools(): Promise<LendingPoolCreated[]> {
   try {
     const query = queryLendingPool();
-    const data = await graphClient.request<{ lendingPoolCreateds: LendingPoolCreated[] }>(query);
-    
-    if (!data?.lendingPoolCreateds) {
+    const data = await graphClient.request<{
+      lendingPoolCreateds: { items: LendingPoolCreated[] };
+    }>(query);
+
+    if (!data?.lendingPoolCreateds?.items) {
       return [];
     }
-    
-    const pools = data.lendingPoolCreateds;
+
+    const pools = data.lendingPoolCreateds.items;
 
     if (!Array.isArray(pools)) {
       return [];
     }
 
     // Filter out invalid pools
-    const validPools = pools.filter(pool => 
-      pool.lendingPool && 
-      pool.borrowToken && 
-      pool.collateralToken
+    const validPools = pools.filter(
+      (pool) => pool.lendingPool && pool.borrowToken && pool.collateralToken
     );
-    
+
     return validPools;
   } catch (error) {
-    console.error('Error fetching lending pools:', error);
+    console.error("Error fetching lending pools:", error);
     return [];
   }
-}              
+}

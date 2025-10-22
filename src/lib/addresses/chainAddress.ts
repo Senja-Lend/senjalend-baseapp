@@ -8,7 +8,7 @@ export const chains: Chain[] = [
     logo: "/chain/base.png",
     contracts: {
       lendingPool: "",
-      factory: "0x5a28316959551dA618F84070FfF70B390270185C",
+      factory: "0x42C5dFc5899160e9c4e2E139AfFe7472dDf4D86E",
       position: "",
       blockExplorer: "https://basescan.org",
     },
