@@ -284,7 +284,7 @@ export const RepayDialog = ({
       <Dialog open={isOpen} onOpenChange={onClose}>
         <DialogContent className="max-w-md mx-auto bg-white/95 backdrop-blur-sm border-sunset-orange/30 w-[calc(100vw-2rem)] sm:w-full">
           <DialogHeader>
-          <DialogTitle className="text-lg font-semibold text-gray-900 text-center">
+          <DialogTitle className="text-lg font-semibold text-gray-900 text-center hidden">
             Repay by Collateral
           </DialogTitle>
           </DialogHeader>
@@ -328,11 +328,11 @@ export const RepayDialog = ({
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <label className="text-sm font-medium text-gray-700">
-                  Amount in {selectedToken?.symbol} (Input)
+                  Amount in {selectedToken?.symbol}
                 </label>
                 <div className="flex items-center space-x-2">
                   <span className="text-xs text-gray-500">
-                    Balance: {collateralLoading ? (
+                    Collateral Balance: {collateralLoading ? (
                       <div className="flex items-center gap-1">
                         <div className="w-3 h-3 border border-orange-500 border-t-transparent rounded-full animate-spin"></div>
                         <span>Loading...</span>
@@ -382,11 +382,11 @@ export const RepayDialog = ({
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <label className="text-sm font-medium text-gray-700">
-                  Amount in {selectedPool.borrowTokenInfo?.symbol} (Repay Amount)
+                  Amount in {selectedPool.borrowTokenInfo?.symbol}
                 </label>
                 <div className="flex items-center space-x-2">
                   <span className="text-xs text-gray-500">
-                    Balance: {userBorrowSharesLoading ? (
+                    Your Borrow {userBorrowSharesLoading ? (
                       <div className="flex items-center gap-1">
                         <div className="w-3 h-3 border border-orange-500 border-t-transparent rounded-full animate-spin"></div>
                         <span>Loading...</span>
