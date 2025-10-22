@@ -1,7 +1,7 @@
 'use client';
 
 import { useAccount, useConnect, useDisconnect, useSwitchChain, useBalance } from 'wagmi';
-import { base, optimism } from 'viem/chains';
+import { base, arbitrum } from 'viem/chains';
 
 export const useWagmiWallet = () => {
   const { address, isConnected, chainId } = useAccount();
@@ -22,7 +22,7 @@ export const useWagmiWallet = () => {
 
   const switchNetwork = async (targetChainId: number) => {
     // Check if the chain is supported
-    const supportedChains = [base, optimism];
+    const supportedChains = [base, arbitrum];
     const targetChain = supportedChains.find(chain => chain.id === targetChainId);
     if (!targetChain) {
       throw new Error(`Chain with ID ${targetChainId} is not supported`);
@@ -36,7 +36,7 @@ export const useWagmiWallet = () => {
       return null;
     }
     
-    const supportedChains = [base, optimism];
+    const supportedChains = [base, arbitrum];
     const currentChain = supportedChains.find(chain => chain.id === chainId);
     return currentChain ? {
       id: currentChain.id,

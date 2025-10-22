@@ -18,7 +18,7 @@ import { useReadUserBorrowShares } from "@/hooks/read/useReadUserBorrowShares";
 import { useReadUserPosition } from "@/hooks/read/usereadUserPosition";
 import { useReadExchangeRate } from "@/hooks/read/useReadExchangeRate";
 import { useOptimizedExchangeRate } from "@/hooks/read/useOptimizedExchangeRate";
-import { useReadTotalCollateralInWkaia } from "@/hooks/read/useReadTotalCollateralInWkaia";
+import { useReadTotalCollateralInWkaia } from "@/hooks/read/useReadTotalCollateral";
 import { formatLargeNumber } from "@/utils/format";
 import { tokens } from "@/lib/addresses/tokenAddress";
 import { useCurrentChainId } from "@/lib/chain";

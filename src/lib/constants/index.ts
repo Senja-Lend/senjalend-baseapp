@@ -89,14 +89,14 @@ export const POOL_ACTIONS = {
  * Chain configurations
  */
 export const CHAIN_CONFIG = {
-  SUPPORTED_CHAINS: [1, 137, 84532, 42161, 10], // Ethereum, Polygon, Base, Arbitrum, Optimism
-  DEFAULT_CHAIN: 84532, // Base
+  SUPPORTED_CHAINS: [8453, 42161], // Base, Arbitrum, 
+  DEFAULT_CHAIN: 8453, // Base
 } as const;
 
 /**
  * Default chain ID constant
  */
-export const DEFAULT_CHAIN_ID = 84532; // Base
+export const DEFAULT_CHAIN_ID = 8453; // Base
 
 /**
  * Validation constants

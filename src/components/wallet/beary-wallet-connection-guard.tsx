@@ -23,11 +23,11 @@ interface BearyWalletConnectionGuardProps {
   onCancel: () => void;
   /** Pool data for context */
   pool?: LendingPoolWithTokens;
-  /** Target chain ID (default: 8453 for Kaia) */
+  /** Target chain ID (default: 8453 for Base) */
   targetChainId?: number;
 }
 
-const TARGET_CHAIN_ID = 8453; // Kaia chain ID
+const TARGET_CHAIN_ID = 8453; // Base chain ID
 
 export const BearyWalletConnectionGuard = memo(
   function BearyWalletConnectionGuard({
@@ -115,7 +115,7 @@ export const BearyWalletConnectionGuard = memo(
                 {needsConnection
                   ? "Connect your wallet to access this lending pool!"
                   : needsChainSwitch
-                  ? "Switch to Kaia network to interact with this pool!"
+                  ? "Switch to Base network to interact with this pool!"
                   : "You're all set to interact with this pool!"}
               </p>
               <p className="text-sm text-gray-500 mt-2">
@@ -144,7 +144,7 @@ export const BearyWalletConnectionGuard = memo(
                 >
                   <div className="flex items-center gap-3">
                     <ArrowRight className="h-5 w-5" />
-                    Switch to Kaia Network
+                    Switch to Base Network
                   </div>
                 </Button>
               )}

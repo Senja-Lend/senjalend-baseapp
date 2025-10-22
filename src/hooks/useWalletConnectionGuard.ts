@@ -21,7 +21,7 @@ interface UseWalletConnectionGuardReturn {
   isWalletReady: boolean;
 }
 
-const TARGET_CHAIN_ID = 8453; // Kaia chain ID
+const TARGET_CHAIN_ID = 8453; // Base chain ID
 
 export function useWalletConnectionGuard(): UseWalletConnectionGuardReturn {
   const [isGuardActive, setIsGuardActive] = useState(false);

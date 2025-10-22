@@ -30,15 +30,20 @@ const HistoryClient = memo(function HistoryClient() {
 
     // Then filter out transactions with unknown token addresses
     filtered = filtered.filter((tx) => {
-      const token = getTokenByAddress(tx.asset, 8453); // Use Base chain ID
+      // Try asset/address/collateralAsset fields depending on transaction type
+      const assetAddress =
+        (tx as any).asset ||
+        (tx as any).address ||
+        (tx as any).collateralAsset;
+
+      if (!assetAddress) return false;
+      const token = getTokenByAddress(assetAddress, 8453); // Use Base chain ID
       return token !== null;
     });
 
     return filtered;
   }, [transactions, selectedType]);
 
-  // Reset page to 0 if filter changes or data changes
-  // (to prevent being stuck on page > 0 when filter changes)
   useEffect(() => {
     setPage(0);
   }, [selectedType]);

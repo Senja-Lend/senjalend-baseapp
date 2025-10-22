@@ -1,3 +1,4 @@
+import React from "react";
 import { Transaction } from "./types";
 import { TokenDisplay } from "./TokenDisplay";
 import { TransactionTypeBadge } from "./TransactionTypeBadge";
@@ -29,17 +30,17 @@ export function TransactionTable({
           [...Array(3)].map((_, index) => (
             <div
               key={`mobile-loading-${index}`}
-              className="p-3 sm:p-4 border-b border-gray-200/50 animate-pulse"
+              className="p-3 sm:p-4 border-b border-gray-100 animate-pulse"
             >
               <div className="flex justify-between items-start mb-2">
                 <div className="h-6 bg-gray-200 rounded w-20"></div>
-                <div className="h-4 bg-gray-200 rounded w-4"></div>
+                <div className="h-4 bg-gray-800 rounded w-4"></div>
               </div>
               <div className="space-y-2">
                 {[...Array(5)].map((_, i) => (
                   <div key={i} className="flex justify-between items-center">
-                    <div className="h-3 bg-gray-200 rounded w-12"></div>
-                    <div className="h-4 bg-gray-200 rounded w-20"></div>
+                    <div className="h-3 bg-gray-800 rounded w-12"></div>
+                    <div className="h-4 bg-gray-800 rounded w-20"></div>
                   </div>
                 ))}
               </div>
@@ -48,7 +49,7 @@ export function TransactionTable({
         ) : transactions.length === 0 ? (
           // Mobile empty state
           <div className="p-6 sm:p-8 text-center">
-            <div className="text-gray-500 text-lg mb-2">
+            <div className="text-gray-800 text-lg mb-2">
               No transactions found
             </div>
             <div className="text-gray-400 text-sm">
@@ -59,21 +60,114 @@ export function TransactionTable({
           // Mobile data cards - filter out transactions with unknown tokens
           transactions
             .filter((transaction) => {
-              const token = getTokenByAddress(transaction.asset, chainId);
-              return token !== null; // Only show transactions with known tokens
+              // For swap transactions, check both tokenIn and tokenOut
+              if (transaction.type === "swap_collateral") {
+                const tokenIn = getTokenByAddress(transaction.tokenIn, chainId);
+                const tokenOut = getTokenByAddress(
+                  transaction.tokenOut,
+                  chainId
+                );
+                return tokenIn !== null && tokenOut !== null;
+              }
+              // For withdraw_collateral, we don't filter by asset since it doesn't have one
+              // We'll get the token from pool.token0 or pool.token1
+              if (transaction.type === "withdraw_collateral") {
+                return true;
+              }
+              // For other transactions, check asset field
+              if ("asset" in transaction) {
+                const token = getTokenByAddress(transaction.asset, chainId);
+                return token !== null;
+              }
+              return true;
             })
             .map((transaction) => {
-              const token = getTokenByAddress(transaction.asset, chainId);
-              // At this point, token is guaranteed to not be null due to filter above
-              const formattedAmount = formatTokenAmount(
-                transaction.amount,
-                token!.decimals
-              );
+              // Determine the display information based on transaction type
+              let assetDisplay: React.ReactNode;
+              let amountDisplay: React.ReactNode;
+
+              if (transaction.type === "swap_collateral") {
+                const tokenIn = getTokenByAddress(transaction.tokenIn, chainId);
+                const tokenOut = getTokenByAddress(
+                  transaction.tokenOut,
+                  chainId
+                );
+                const formattedAmountIn = formatTokenAmount(
+                  transaction.amountIn,
+                  tokenIn!.decimals
+                );
+                const formattedAmountOut = formatTokenAmount(
+                  transaction.amountOut,
+                  tokenOut!.decimals
+                );
+
+                assetDisplay = (
+                  <div className="flex items-center gap-1">
+                    <TokenDisplay
+                      address={transaction.tokenIn}
+                      chainId={chainId}
+                    />
+                    <span className="text-xs">→</span>
+                    <TokenDisplay
+                      address={transaction.tokenOut}
+                      chainId={chainId}
+                    />
+                  </div>
+                );
+
+                amountDisplay = (
+                  <div className="text-sm font-medium text-gray-800">
+                    {formattedAmountIn} {tokenIn?.symbol} → {formattedAmountOut}{" "}
+                    {tokenOut?.symbol}
+                  </div>
+                );
+              } else if (transaction.type === "withdraw_collateral") {
+                // For withdraw collateral, show position address since no pool/asset
+                assetDisplay = (
+                  <span className="text-sm text-gray-800">
+                    Position: {shortenAddress(transaction.positionAddress)}
+                  </span>
+                );
+
+                // Format amount with 18 decimals for WETH (assuming it's WETH)
+                const formattedAmount = formatTokenAmount(
+                  transaction.amount,
+                  18
+                );
+                amountDisplay = (
+                  <div className="text-sm font-medium text-gray-800">
+                    {formattedAmount} WETH
+                  </div>
+                );
+              } else if ("asset" in transaction) {
+                const token = getTokenByAddress(transaction.asset, chainId);
+                const formattedAmount = formatTokenAmount(
+                  transaction.amount,
+                  token!.decimals
+                );
+
+                assetDisplay = (
+                  <TokenDisplay address={transaction.asset} chainId={chainId} />
+                );
+
+                amountDisplay = (
+                  <div className="text-sm font-medium text-gray-800">
+                    {formattedAmount} {token?.symbol || "Unknown"}
+                  </div>
+                );
+              } else {
+                assetDisplay = (
+                  <span className="text-sm text-gray-800">N/A</span>
+                );
+                amountDisplay = (
+                  <span className="text-sm text-gray-800">N/A</span>
+                );
+              }
 
               return (
                 <div
                   key={transaction.id}
-                  className="p-3 sm:p-4 border-b border-gray-100/50 last:border-b-0"
+                  className="p-3 sm:p-4 border-b border-gray-800/50 last:border-b-0"
                 >
                   <div className="flex justify-between items-start mb-2">
                     <TransactionTypeBadge type={transaction.type} />
@@ -85,7 +179,7 @@ export function TransactionTable({
                       }
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1 text-sm text-gray-800 hover:underline"
+                      className="inline-flex items-center gap-1 text-sm text-gray-800 hover:text-blue-800/80 hover:underline"
                     >
                       <ExternalLinkIcon className="w-3 h-3" />
                     </a>
@@ -93,39 +187,45 @@ export function TransactionTable({
 
                   <div className="space-y-2">
                     <div className="flex justify-between items-center">
-                      <span className="text-xs text-gray-500">Asset:</span>
-                      <div className="text-gray-800">
-                        <TokenDisplay
-                          address={transaction.asset}
-                          chainId={chainId}
-                        />
-                      </div>
+                      <span className="text-xs text-gray-800">Asset:</span>
+                      <div className="text-gray-800">{assetDisplay}</div>
                     </div>
 
                     <div className="flex justify-between items-center">
-                      <span className="text-xs text-gray-500">Amount:</span>
-                      <div className="text-sm font-medium text-gray-800">
-                        {formattedAmount} {token?.symbol || "Unknown"}
-                      </div>
+                      <span className="text-xs text-gray-800">Amount:</span>
+                      {amountDisplay}
                     </div>
 
-                    <div className="flex justify-between items-center">
-                      <span className="text-xs text-gray-500">Pool:</span>
-                      <div className="text-sm text-gray-800">
-                        {shortenAddress(transaction.pool)}
+                    {/* Only show pool for transactions that have pool field */}
+                    {"pool" in transaction && transaction.pool && (
+                      <div className="flex justify-between items-center">
+                        <span className="text-xs text-gray-800">Pool:</span>
+                        <div className="text-sm text-gray-800">
+                          {shortenAddress(transaction.pool.address)}
+                        </div>
                       </div>
-                    </div>
+                    )}
+
+                    {/* Show position address for withdraw collateral */}
+                    {transaction.type === "withdraw_collateral" && (
+                      <div className="flex justify-between items-center">
+                        <span className="text-xs text-gray-800">Position:</span>
+                        <div className="text-sm text-gray-800">
+                          {shortenAddress(transaction.positionAddress)}
+                        </div>
+                      </div>
+                    )}
 
                     <div className="flex justify-between items-center">
-                      <span className="text-xs text-gray-500">Time:</span>
+                      <span className="text-xs text-gray-800">Time:</span>
                       <div className="text-sm text-gray-800">
                         {formatTimestamp(transaction.timestamp)}
                       </div>
                     </div>
 
                     <div className="flex justify-between items-center">
-                      <span className="text-xs text-gray-500">Block:</span>
-                      <div className="text-xs text-gray-800/70">
+                      <span className="text-xs text-gray-800">Block:</span>
+                      <div className="text-xs text-gray-800">
                         {transaction.blockNumber.toString()}
                       </div>
                     </div>

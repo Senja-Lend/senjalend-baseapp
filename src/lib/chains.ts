@@ -1,6 +1,5 @@
 import { defineChain, type Chain } from "viem";
 
-// Extended chain type with custom properties
 export type ExtendedChain = Chain & {
   iconUrl?: string;
   iconBackground?: string;
@@ -12,7 +11,7 @@ export const base = defineChain({
   nativeCurrency: { name: "ETH", symbol: "ETH", decimals: 18 },
   rpcUrls: {
     default: {
-      http: ["https://mainnet.base.org/"],
+      http: [process.env.NEXT_PUBLIC_BASE_RPC!],
     },
   },
   blockExplorers: {
@@ -26,24 +25,22 @@ export const base = defineChain({
   iconUrl: "/chain/base-logo.png",
 });
 
-export const optimism = defineChain({
+export const arbitrum = defineChain({
   id: 10,
-  name: "Optimism",
+  name: "Arbitrum",
   nativeCurrency: { name: "ETH", symbol: "ETH", decimals: 18 },
   rpcUrls: {
     default: {
-      http: [
-        "https://mainnet.optimism.io",
-      ],
+      http: ["https://arb1.arbitrum.io/rpc"],
     },
   },
   blockExplorers: {
     default: {
       name: "Ether Scan",
-      url: "https://optimistic.etherscan.io",
+      url: "https://arbiscan.io",
     },
   },
   testnet: false,
   iconBackground: "#ffff",
-  iconUrl: "/chain/optimism-logo.svg",
+  iconUrl: "/chain/arbitrum.png",
 });

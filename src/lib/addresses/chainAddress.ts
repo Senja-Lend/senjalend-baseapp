@@ -14,15 +14,15 @@ export const chains: Chain[] = [
     },
   },
   {
-    id: 10,
-    destinationEndpoint: 30111,
-    name: "Optimism",
-    logo: "/chain/optimism-logo.svg",
+    id: 42161,
+    destinationEndpoint: 30110,
+    name: "Arbitrum",
+    logo: "/chain/arbitrum.png",
     contracts: {
       lendingPool: "",
       factory: "",
       position: "",
-      blockExplorer: "https://optimism.etherscan.io",
+      blockExplorer: "https://arbiscan.io",
     },
   },
 ];

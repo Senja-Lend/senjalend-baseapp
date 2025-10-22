@@ -89,7 +89,7 @@ const BorrowTab = ({ pool }: BorrowTabProps) => {
     pool?.borrowTokenInfo || {
       name: "Unknown",
       symbol: "UNKNOWN",
-      logo: "/token/kaia-logo.svg",
+      logo: "/token/base-logo.svg",
       decimals: 18,
       addresses: {}
     }
@@ -189,7 +189,7 @@ const BorrowTab = ({ pool }: BorrowTabProps) => {
         <PoolInfoCard
           collateralToken={{
             symbol: pool.collateralTokenInfo?.symbol || "Token",
-            logo: pool.collateralTokenInfo?.logo || "/token/kaia-logo.svg",
+            logo: pool.collateralTokenInfo?.logo || "/token/base-logo.svg",
           }}
           borrowToken={{
             symbol: pool.borrowTokenInfo?.symbol || "Token",
@@ -255,7 +255,7 @@ const BorrowTab = ({ pool }: BorrowTabProps) => {
                     ) : fee ? (
                       `${Number(
                         formatUnits(fee, 18) // Convert fee with 18 decimals
-                      ).toFixed(6)} BASE`
+                      ).toFixed(6)} ETH`
                     ) : (
                       "No fee data"
                     )}

@@ -1,8 +1,8 @@
 import { cookieStorage, createConfig, createStorage, http } from "wagmi";
-import { base, optimism } from "./chains";
+import { base, arbitrum } from "./chains";
 import { coinbaseWallet, metaMask, walletConnect } from "wagmi/connectors";
 
-export const chains = [base, optimism];
+export const chains = [base, arbitrum];
 const projectId = process.env.NEXT_PUBLIC_REOWN_PROJECT_ID!;
 
 export const chainData = {
@@ -12,17 +12,17 @@ export const chainData = {
     displayName: base.name,
     symbol: base.nativeCurrency.symbol,
   },
-  [optimism.id]: {
-    ...optimism,
-    logo: optimism.iconUrl,
-    displayName: optimism.name,
-    symbol: optimism.nativeCurrency.symbol,
+  [arbitrum.id]: {
+    ...arbitrum,
+    logo: arbitrum.iconUrl,
+    displayName: arbitrum.name,
+    symbol: arbitrum.nativeCurrency.symbol,
   },
 };
 
 export function getConfig() {
   return createConfig({
-    chains: [base, optimism],
+    chains: [base, arbitrum],
     ssr: true,
     batch: {
       multicall: true,
@@ -47,7 +47,7 @@ export function getConfig() {
           keepalive: true,
         },
       }),
-      [optimism.id]: http(optimism.rpcUrls.default.http[0], {
+      [arbitrum.id]: http(arbitrum.rpcUrls.default.http[0], {
         batch: true,
         fetchOptions: {
           keepalive: true,
