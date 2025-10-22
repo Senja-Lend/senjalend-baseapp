@@ -30,8 +30,8 @@ export const useReadFee = (
     return parseAmountToBigIntSafe(amount, decimal);
   }, [amount, decimal]);
 
-  // If destination endpoint is 30150 (Kaia), fee is always 0
-  const isKaiaEndpoint = destinationEndpoint === 30150;
+  // If destination endpoint is Base (30184), fee is 0 (Base to Base)
+  const isBaseEndpoint = destinationEndpoint === 30184;
 
   const {
     data: rawFee,
@@ -49,14 +49,14 @@ export const useReadFee = (
       parsedAmount,
     ],
     query: {
-      enabled: !isKaiaEndpoint, // Only call contract if not Kaia endpoint
+      enabled: !isBaseEndpoint, // Only call contract if not Base endpoint
     },
   });
 
-  // Convert fee to 18 decimals and handle Kaia endpoint
+  // Convert fee to 18 decimals and handle Base endpoint
   const fee = useMemo(() => {
-    if (isKaiaEndpoint) {
-      return BigInt(0); // Fee is 0 for Kaia endpoint
+    if (isBaseEndpoint) {
+      return BigInt(0); // Fee is 0 for Base endpoint
     }
     
     if (!rawFee) {
@@ -67,12 +67,12 @@ export const useReadFee = (
     const feeBigInt = rawFee as bigint;
     // Assuming the fee comes in native token decimals, convert to 18 decimals
     return feeBigInt;
-  }, [rawFee, isKaiaEndpoint]);
+  }, [rawFee, isBaseEndpoint]);
 
   return {
     fee: fee,
-    feeLoading: isKaiaEndpoint ? false : feeLoading, // No loading for Kaia endpoint
-    feeError: isKaiaEndpoint ? null : feeError, // No error for Kaia endpoint
+    feeLoading: isBaseEndpoint ? false : feeLoading, // No loading for Base endpoint
+    feeError: isBaseEndpoint ? null : feeError, // No error for Base endpoint
     refetchFee,
     parsedAmount,
   };

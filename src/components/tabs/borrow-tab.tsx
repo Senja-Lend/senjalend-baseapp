@@ -39,8 +39,8 @@ interface BorrowTabProps {
 }
 
 const BorrowTab = ({ pool }: BorrowTabProps) => {
-  const [chainFrom] = useState("8453"); // Default to Kaia
-  const [chainTo, setChainTo] = useState("8453"); // Default to Kaia for on-chain borrowing
+  const [chainFrom] = useState("8453");
+  const [chainTo, setChainTo] = useState("8453");
   const [amount, setAmount] = useState(""); // Amount to borrow
 
   const currentChainId = useCurrentChainId();
@@ -50,7 +50,7 @@ const BorrowTab = ({ pool }: BorrowTabProps) => {
     const selectedChain = chains.find(
       (chain) => chain.id.toString() === chainTo
     );
-    return selectedChain?.destinationEndpoint || 30150; // Default to Kaia endpoint
+    return selectedChain?.destinationEndpoint || 30184; // Default to Base endpoint
   }, [chainTo]);
 
   // Refetch functionality
@@ -250,12 +250,12 @@ const BorrowTab = ({ pool }: BorrowTabProps) => {
                       "Loading..."
                     ) : feeError ? (
                       <span className="text-red-500">Error loading fee</span>
-                    ) : destinationEndpoint === 30150 ? (
+                    ) : destinationEndpoint === 30184 ? (
                       "0"
                     ) : fee ? (
                       `${Number(
                         formatUnits(fee, 18) // Convert fee with 18 decimals
-                      ).toFixed(6)} KAIA`
+                      ).toFixed(6)} BASE`
                     ) : (
                       "No fee data"
                     )}

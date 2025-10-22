@@ -24,11 +24,11 @@ interface WalletConnectionGuardProps {
   onCancel: () => void;
   /** Pool data for context */
   pool?: LendingPoolWithTokens;
-  /** Target chain ID (default: 8453 for Kaia) */
+  /** Target chain ID (default: 8453 for Base) */
   targetChainId?: number;
 }
 
-const TARGET_CHAIN_ID = 8453; // Kaia chain ID
+const TARGET_CHAIN_ID = 8453; // Base chain ID
 
 export const WalletConnectionGuard = memo(function WalletConnectionGuard({
   isActive,
@@ -150,7 +150,7 @@ export const WalletConnectionGuard = memo(function WalletConnectionGuard({
               >
                 <div className="flex items-center gap-3">
                   <ArrowRight className="h-5 w-5" />
-                  Switch to Kaia Network
+                  Switch to Base Network
                 </div>
               </Button>
             )}
@@ -172,7 +172,7 @@ export const WalletConnectionGuard = memo(function WalletConnectionGuard({
           <div className="text-center text-sm text-gray-600">
             <p>
               To interact with this pool, you need to connect your wallet and
-              switch to the Kaia network (Chain ID: 8453).
+              switch to the Base network (Chain ID: 8453).
             </p>
           </div>
         </div>

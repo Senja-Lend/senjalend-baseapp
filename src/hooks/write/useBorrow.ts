@@ -105,8 +105,8 @@ export const useBorrow = (chainId: number, onSuccess: () => void) => {
       // Parse amount with proper decimal conversion
       const amountBigInt = parseAmountToBigIntSafe(amount, borrowTokenDecimals);
 
-      // If destination endpoint is 30150 (Kaia), fee is 0
-      const finalGasFee = destinationEndpoint === 30150 ? BigInt(0) : gasFee;
+      // If destination endpoint is Base (30184), fee is 0 (Base to Base)
+      const finalGasFee = destinationEndpoint === 30184 ? BigInt(0) : gasFee;
 
 
       const tx = await writeContractAsync({
@@ -119,7 +119,7 @@ export const useBorrow = (chainId: number, onSuccess: () => void) => {
           destinationEndpoint,             // _dstEid (uint32)
           BigInt(6500)                     // _addExecutorLzReceiveOption (uint128)
         ],
-        value: finalGasFee,                // Gas fee as value (0 for Kaia endpoint)
+        value: finalGasFee,                // Gas fee as value (0 for Base endpoint)
       });
 
       setTxHash(tx as HexAddress);
