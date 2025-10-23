@@ -44,7 +44,7 @@ export async function GET() {
       primaryCategory: "finance",
       screenshotUrls: ["https://senja-land.vercel.app/senja-logo.png"],
       heroImageUrl: "https://senja-land.vercel.app/senja-logo.png",
-      tagline: "grow",
+      tagline: "Permisionless Crosschain",
       tags: ["finance"],
       buttonTitle: "open senja",
       ogTitle: "Senja - Crosschain Lending",

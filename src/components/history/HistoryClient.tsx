@@ -20,7 +20,6 @@ const HistoryClient = memo(function HistoryClient() {
   const { transactions, loading, error } = useTransactions(
     isConnected && account ? account : undefined
   );
-
   const filteredTransactions = useMemo(() => {
     // First filter by transaction type
     let filtered =
@@ -30,15 +29,22 @@ const HistoryClient = memo(function HistoryClient() {
 
     // Then filter out transactions with unknown token addresses
     filtered = filtered.filter((tx) => {
-      // Try asset/address/collateralAsset fields depending on transaction type
-      const assetAddress =
-        (tx as any).asset ||
-        (tx as any).address ||
-        (tx as any).collateralAsset;
-
-      if (!assetAddress) return false;
-      const token = getTokenByAddress(assetAddress, 8453); // Use Base chain ID
-      return token !== null;
+      // For swap transactions, check both tokenIn and tokenOut
+      if (tx.type === 'swap_collateral') {
+        const tokenIn = getTokenByAddress(tx.tokenIn, 8453);
+        const tokenOut = getTokenByAddress(tx.tokenOut, 8453);
+        return tokenIn !== null && tokenOut !== null;
+      }
+      // For withdraw_collateral, we don't filter by asset since it doesn't have one
+      if (tx.type === 'withdraw_collateral') {
+        return true;
+      }
+      // For other transactions, check asset field if it exists
+      if ('asset' in tx) {
+        const token = getTokenByAddress(tx.asset, 8453); // Use Base chain ID
+        return token !== null;
+      }
+      return true;
     });
 
     return filtered;

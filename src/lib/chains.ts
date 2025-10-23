@@ -26,7 +26,7 @@ export const base = defineChain({
 });
 
 export const arbitrum = defineChain({
-  id: 10,
+  id: 42161,
   name: "Arbitrum",
   nativeCurrency: { name: "ETH", symbol: "ETH", decimals: 18 },
   rpcUrls: {
