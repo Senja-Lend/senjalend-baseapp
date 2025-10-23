@@ -10,25 +10,15 @@ import { textStyles, inputStyles } from "@/styles/common";
 import { PLACEHOLDERS } from "@/lib/constants";
 
 interface BalanceInputFormProps {
-  /** The selected pool */
   pool: LendingPoolWithTokens | null;
-  /** Current amount value */
   amount: string;
-  /** Callback when amount changes */
   onAmountChange: (amount: string) => void;
-  /** Token type to show balance for */
   tokenType: "borrow" | "collateral";
-  /** Whether input is disabled */
   disabled?: boolean;
-  /** Custom className */
   className?: string;
-  /** Custom label for the amount input */
   customLabel?: string;
 }
 
-/**
- * Reusable component for input form with balance display and Max button
- */
 export const BalanceInputForm = memo(function BalanceInputForm({
   pool,
   amount,
@@ -40,7 +30,6 @@ export const BalanceInputForm = memo(function BalanceInputForm({
 }: BalanceInputFormProps) {
   const currentChainId = useCurrentChainId();
 
-  // Get token info based on type
   const tokenInfo = tokenType === "collateral" 
     ? pool?.collateralTokenInfo 
     : pool?.borrowTokenInfo;
@@ -57,17 +46,12 @@ export const BalanceInputForm = memo(function BalanceInputForm({
     tokenDecimals
   );
 
-  /**
-   * Handle amount input change
-   */
   const handleAmountChange = useCallback(
     (e: { target: { value: string } }) => {
       const inputValue = e.target.value;
       
-      // Prevent negative numbers and invalid characters
       const cleanValue = inputValue.replace(/[^0-9.]/g, '');
       
-      // Prevent multiple decimal points
       const parts = cleanValue.split('.');
       const sanitizedValue = parts.length > 2 ? parts[0] + '.' + parts.slice(1).join('') : cleanValue;
       
@@ -76,9 +60,6 @@ export const BalanceInputForm = memo(function BalanceInputForm({
     [onAmountChange]
   );
 
-  /**
-   * Handle setting maximum balance
-   */
   const handleSetMax = useCallback(() => {
     if (userWalletBalanceParsed > 0) {
       onAmountChange(userWalletBalanceFormatted);

@@ -26,7 +26,6 @@ export default function NotFound() {
           className="shadow-2xl"
         />
         
-        {/* Custom Action Buttons */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mt-6">
           <Button
             onClick={handleGoHome}
@@ -50,7 +49,6 @@ export default function NotFound() {
           </Button>
         </div>
 
-        {/* Additional Help Text */}
         <div className="text-center mt-8">
           <p className="text-gray-600 text-sm">
             If you think this is a mistake, please{' '}

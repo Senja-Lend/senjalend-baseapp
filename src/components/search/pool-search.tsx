@@ -51,35 +51,36 @@ const PoolItem = memo(
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
             <div className="flex space-x-2">
-          {pool.collateralTokenInfo && (
-            <div className="relative">
-              <Image
-                src={pool.collateralTokenInfo.logo}
-                alt={pool.collateralTokenInfo.name}
-                width={32}
-                height={32}
-                className="rounded-full border-2 border-white shadow-md group-hover:shadow-lg transition-shadow"
-              />
-            </div>
-          )}
-          {pool.borrowTokenInfo && (
-            <div className="relative">
-              <Image
-                src={pool.borrowTokenInfo.logo}
-                alt={pool.borrowTokenInfo.name}
-                width={32}
-                height={32}
-                className="rounded-full border-2 border-white shadow-md group-hover:shadow-lg transition-shadow"
-              />
-            </div>
-            )}
+              {pool.collateralTokenInfo && (
+                <div className="relative">
+                  <Image
+                    src={pool.collateralTokenInfo.logo}
+                    alt={pool.collateralTokenInfo.name}
+                    width={32}
+                    height={32}
+                    className="rounded-full border-2 border-white shadow-md group-hover:shadow-lg transition-shadow"
+                  />
+                </div>
+              )}
+              {pool.borrowTokenInfo && (
+                <div className="relative">
+                  <Image
+                    src={pool.borrowTokenInfo.logo}
+                    alt={pool.borrowTokenInfo.name}
+                    width={32}
+                    height={32}
+                    className="rounded-full border-2 border-white shadow-md group-hover:shadow-lg transition-shadow"
+                  />
+                </div>
+              )}
             </div>
             <div>
               <div className="text-sm font-semibold text-gray-900">
                 {getPoolDisplayName(pool)}
               </div>
               <div className="text-xs text-gray-500">
-                {pool.collateralTokenInfo?.name || "Unknown"} → {pool.borrowTokenInfo?.name || "Unknown"}
+                {pool.collateralTokenInfo?.name || "Unknown"} →{" "}
+                {pool.borrowTokenInfo?.name || "Unknown"}
               </div>
             </div>
           </div>
@@ -108,7 +109,6 @@ export const PoolSearch = memo(function PoolSearch({
   className = "",
 }: PoolSearchProps) {
   const handleSearchChange = useCallback(
-     
     (e: React.ChangeEvent<HTMLInputElement>) => {
       onSearchChange(e.target.value);
     },
@@ -130,10 +130,10 @@ export const PoolSearch = memo(function PoolSearch({
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
           <Input
             type="text"
-            placeholder="Search pools by token name or symbol..."
+            placeholder="Search pools..."
             value={searchQuery}
             onChange={handleSearchChange}
-            className="pl-10 pr-4 py-2 border border-gray-300 rounded-xl focus:border-orange-400 focus:ring-2 focus:ring-orange-100"
+            className="pl-10 pr-4 text-base py-2 border border-gray-300 rounded-xl focus:border-orange-400 focus:ring-2 focus:ring-orange-100"
           />
           {searchQuery && (
             <Button
@@ -152,16 +152,16 @@ export const PoolSearch = memo(function PoolSearch({
           <div className="p-6 text-center">
             <div className="inline-flex items-center gap-2 text-gray-500">
               <div className="w-4 h-4 border-2 border-orange-400 border-t-transparent rounded-full animate-spin"></div>
-
             </div>
           </div>
         ) : filteredPools.length === 0 ? (
           <BearyNotFound
             searchQuery={searchQuery}
             title={searchQuery ? "No Pools Found" : "No Pools Available"}
-            description={searchQuery 
-              ? `No lending pools found matching "${searchQuery}". Try searching with different keywords.`
-              : "No lending pools are available on this network. Switch to a different network to see available pools."
+            description={
+              searchQuery
+                ? `No lending pools found matching "${searchQuery}". Try searching with different keywords.`
+                : "No lending pools are available on this network. Switch to a different network to see available pools."
             }
             onRetry={() => onSearchChange("")}
             onClearSearch={onClearSearch}

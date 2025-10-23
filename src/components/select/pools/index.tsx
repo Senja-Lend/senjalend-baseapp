@@ -267,7 +267,7 @@ export const PoolSelector = memo(function PoolSelector({
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
             <Input
               type="text"
-              placeholder="Search pools by token name or symbol..."
+              placeholder="Search pools"
               value={searchQuery}
               onChange={handleSearchChange}
               className="pl-10 pr-4 py-2 border border-gray-300 rounded-xl focus:border-orange-200 focus:ring-2 focus:ring-orange-100"

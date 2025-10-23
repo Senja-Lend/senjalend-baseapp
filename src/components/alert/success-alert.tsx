@@ -44,22 +44,17 @@ export function SuccessAlert({
     onClose()
   }
 
-  // Function to slice tx hash (first 6 and last 4 characters)
   const sliceTxHash = (hash: string) => {
     if (hash.length <= 10) return hash
     return `${hash.slice(0, 6)}...${hash.slice(-4)}`
   }
 
-  // Function to get block explorer URL based on chain ID
   const getBlockExplorerUrl = (hash: string, chainId?: number) => {
     if (!chainId) return ""
-    
-    // For Base chain (8453), use basescan.org
     if (chainId === 8453) {
       return `https://basescan.org/tx/${hash}`
     }
     
-    // For all other chains, use LayerZero Scan
     return `https://layerzeroscan.com/tx/${hash}`
   }
 

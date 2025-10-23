@@ -6,7 +6,6 @@ import {
   pairLendingPoolsWithTokens,
   LendingPoolWithTokens,
 } from "@/lib/graphql/lendingpool-list.fetch";
-// Note: Removed useCurrentChainId import as we now fetch from all chains
 import { PoolSearch } from "./pool-search";
 
 interface PoolSearchOnlyProps {
@@ -28,33 +27,28 @@ export const PoolSearchOnly = memo(function PoolSearchOnly({
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   
-  // Note: We now fetch pools from all chains, not just the current chain
 
   const loadPools = useCallback(async () => {
     setLoading(true);
     try {
       const rawPools = await fetchLendingPools();
-      // Fetch pools from all chains, not just current chain
       const enrichedPools = pairLendingPoolsWithTokens(rawPools);
       
-      // Filter out pools with unknown tokens
       const validPools = enrichedPools.filter(pool => 
         pool.borrowTokenInfo && pool.collateralTokenInfo
       );
       
       setPools(validPools);
 
-      // Auto-select first pool if requested and no pool is selected
       if (autoSelectFirst && validPools.length > 0 && !selectedPool) {
         onPoolSelect(validPools[0]);
       }
     } catch {
-      // Silent error handling for production
       setPools([]);
     } finally {
       setLoading(false);
     }
-  }, [selectedPool, onPoolSelect, autoSelectFirst]); // Remove currentChainId dependency
+  }, [selectedPool, onPoolSelect, autoSelectFirst]);
 
   useEffect(() => {
     loadPools();
@@ -82,7 +76,6 @@ export const PoolSearchOnly = memo(function PoolSearchOnly({
     });
   }, [pools, searchQuery]);
 
-  // Memoized handlers
   const handleSearchChange = useCallback(
     (query: string) => {
       setSearchQuery(query);

@@ -37,16 +37,12 @@ import {
 } from "@/styles/common";
 import Image from "next/image";
 
-// Utility function to format LTV percentage
 const formatLTV = (ltv: bigint | number | string): string => {
   const ltvNumber = typeof ltv === "bigint" ? Number(ltv) : Number(ltv);
   const percentage = ltvNumber / 1e16;
   return percentage.toFixed(1);
 };
 
-/**
- * Pool action types
- */
 export type PoolActionType =
   | "supply-collateral"
   | "supply-liquidity"
@@ -56,25 +52,14 @@ export type PoolActionType =
   | "withdraw-collateral"
   | "withdraw-liquidity";
 
-/**
- * Props for the PoolActionsDialog component
- */
 interface PoolActionsDialogProps {
-  /** Whether the dialog is open */
   isOpen: boolean;
-  /** Callback when dialog is closed */
   onClose: () => void;
-  /** The selected pool */
   pool: LendingPoolWithTokens | null;
-  /** Callback when action is selected */
   onActionSelect?: (action: PoolActionType) => void;
-  /** Custom className */
   className?: string;
 }
 
-/**
- * Action configuration for pool actions
- */
 const actionConfig = [
   {
     id: "supply-collateral" as PoolActionType,
@@ -134,12 +119,6 @@ const actionConfig = [
   },
 ];
 
-/**
- * PoolActionsDialog component for managing pool actions
- *
- * @param props - Component props
- * @returns JSX element
- */
 export const PoolActionsDialog = memo(function PoolActionsDialog({
   isOpen,
   onClose,
@@ -153,10 +132,8 @@ export const PoolActionsDialog = memo(function PoolActionsDialog({
   const currentChainId = useCurrentChainId();
   const { isConnected } = useAccount();
 
-  // Get APY for the pool
-  const { apyFormatted } = useReadApy(pool?.lendingPool as `0x${string}`);
+  const { borrowApyFormatted,supplyApyFormatted } = useReadApy(pool?.lendingPool as `0x${string}`);
 
-  // Get user balance for the token being supplied/used
   const getTokenAddress = () => {
     if (selectedAction === "supply-collateral" || selectedAction === "withdraw-collateral" || selectedAction === "repay-by-collateral") {
       return pool?.collateralTokenInfo?.addresses[currentChainId] as `0x${string}`;
@@ -184,7 +161,6 @@ export const PoolActionsDialog = memo(function PoolActionsDialog({
   );
 
 
-  // Supply Liquidity Hook
   const {
     handleApproveToken: handleApproveTokenLiquidity,
     handleSupplyLiquidity,
@@ -209,7 +185,6 @@ export const PoolActionsDialog = memo(function PoolActionsDialog({
     resetForm();
   });
 
-  // Supply Collateral Hook
   const {
     handleApproveToken: handleApproveTokenCollateral,
     handleSupplyCollateral,
@@ -234,7 +209,6 @@ export const PoolActionsDialog = memo(function PoolActionsDialog({
     resetForm();
   });
 
-  // Withdraw Liquidity Hook
   const {
     shares: withdrawShares,
     setShares: setWithdrawShares,
@@ -251,7 +225,6 @@ export const PoolActionsDialog = memo(function PoolActionsDialog({
     resetForm();
   });
 
-  // Withdraw Collateral Hook
   const {
     setAmount: setWithdrawAmount,
     handleWithdrawCollateral,
@@ -267,9 +240,6 @@ export const PoolActionsDialog = memo(function PoolActionsDialog({
   });
 
 
-  /**
-   * Reset form to initial state
-   */
   const resetForm = useCallback(() => {
     setAmount("");
     resetApproveStatesLiquidity();
@@ -303,15 +273,10 @@ export const PoolActionsDialog = memo(function PoolActionsDialog({
     setAmount("");
   }, [selectedAction, handleCloseSuccessAlertLiquidity, resetAfterSuccessLiquidity, handleCloseSuccessAlertCollateral, resetAfterSuccessCollateral, handleCloseSuccessAlertWithdrawLiquidity, handleCloseSuccessAlertWithdrawCollateral]);
 
-  /**
-   * Handle action selection
-   */
   const handleActionSelect = useCallback(
     (action: PoolActionType) => {
       setSelectedAction(action);
-      // Reset form when action changes
       resetForm();
-      // Don't call onActionSelect for integrated actions
       if (action === "borrow" || action === "repay" || action === "repay-by-collateral") {
         onActionSelect?.(action);
       }
@@ -319,18 +284,12 @@ export const PoolActionsDialog = memo(function PoolActionsDialog({
     [onActionSelect, resetForm]
   );
 
-  /**
-   * Handle setting maximum balance
-   */
   const handleSetMax = useCallback(() => {
     if (userWalletBalanceParsed > 0) {
       setAmount(userWalletBalanceFormatted);
     }
   }, [userWalletBalanceFormatted, userWalletBalanceParsed]);
 
-  /**
-   * Handle approve token
-   */
   const handleApprove = useCallback(async () => {
     if (!pool || !amount || parseFloat(amount) <= 0) {
       return;
@@ -357,9 +316,6 @@ export const PoolActionsDialog = memo(function PoolActionsDialog({
     }
   }, [amount, pool, selectedAction, handleApproveTokenLiquidity, handleApproveTokenCollateral, currentChainId, resetSuccessStatesLiquidity, resetSuccessStatesCollateral]);
 
-  /**
-   * Handle supply (liquidity or collateral)
-   */
   const handleSupply = useCallback(async () => {
     if (!pool || !amount || parseFloat(amount) <= 0) {
       return;
@@ -374,9 +330,6 @@ export const PoolActionsDialog = memo(function PoolActionsDialog({
     }
   }, [amount, pool, selectedAction, handleSupplyLiquidity, handleSupplyCollateral]);
 
-  /**
-   * Handle withdraw actions
-   */
   const handleWithdraw = useCallback(async () => {
     if (!pool) {
       return;
@@ -396,12 +349,7 @@ export const PoolActionsDialog = memo(function PoolActionsDialog({
     }
   }, [pool, selectedAction, withdrawShares, amount, handleWithdrawLiquidity, setWithdrawAmount, handleWithdrawCollateral]);
 
-
-  /**
-   * Handle dialog close
-   */
   const handleClose = useCallback(() => {
-    // Don't close dialog if transactions are in progress
     const isAnyTransactionInProgress = 
       isSupplyingLiquidity || isConfirmingLiquidity || isApprovingLiquidity || isApproveConfirmingLiquidity ||
       isSupplyingCollateral || isConfirmingCollateral || isApprovingCollateral || isApproveConfirmingCollateral ||
@@ -416,16 +364,12 @@ export const PoolActionsDialog = memo(function PoolActionsDialog({
     resetForm();
   }, [onClose, isSupplyingLiquidity, isConfirmingLiquidity, isApprovingLiquidity, isApproveConfirmingLiquidity, isSupplyingCollateral, isConfirmingCollateral, isApprovingCollateral, isApproveConfirmingCollateral, isWithdrawingLiquidity, isConfirmingWithdrawLiquidity, isWithdrawingCollateral, isConfirmingWithdrawCollateral, resetForm]);
 
-  /**
-   * Get current action config
-   */
   const currentAction = actionConfig.find(
     (action) => action.id === selectedAction
   );
 
   if (!pool) return null;
 
-  // If wallet is not connected, show BearyWalletConnectionGuard
   if (!isConnected) {
     return (
       <BearyWalletConnectionGuard
@@ -514,7 +458,6 @@ export const PoolActionsDialog = memo(function PoolActionsDialog({
             </Select>
           </div>
 
-          {/* Action Content - Render form based on selection */}
           <Card
             className={`p-6 ${currentAction?.bgColor} ${currentAction?.borderColor} border-2`}
           >
@@ -531,7 +474,6 @@ export const PoolActionsDialog = memo(function PoolActionsDialog({
               )}
             </div>
 
-            {/* Pool Information */}
             <div className="bg-white rounded-lg p-4 mb-4 border border-gray-200">
               <div className="grid grid-cols-2 gap-4 text-sm">
                 <div>
@@ -552,7 +494,7 @@ export const PoolActionsDialog = memo(function PoolActionsDialog({
                 </div>
                 <div>
                   <div className="text-gray-500 font-medium">APY:</div>
-                  <div className="font-semibold text-gray-900">{apyFormatted}%</div>
+                  <div className="font-semibold text-gray-900">{supplyApyFormatted}%</div>
                 </div>
                 <div>
                   <div className="text-gray-500 font-medium">LTV:</div>
@@ -563,9 +505,7 @@ export const PoolActionsDialog = memo(function PoolActionsDialog({
               </div>
             </div>
 
-            {/* Action-specific form */}
             <div className="space-y-4">
-              {/* Show form for integrated actions */}
               {(selectedAction === "supply-collateral" || selectedAction === "supply-liquidity" || selectedAction === "withdraw-liquidity" || selectedAction === "withdraw-collateral") && (
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
@@ -577,7 +517,6 @@ export const PoolActionsDialog = memo(function PoolActionsDialog({
                         ? "Amount to Withdraw"
                         : "Amount to Supply"}
                     </label>
-                    {/* Show balance for supply actions */}
                     {(selectedAction === "supply-collateral" || selectedAction === "supply-liquidity") && (
                       <div className="flex items-center gap-2 text-sm text-gray-500">
                         <span>Balance:</span>
@@ -627,7 +566,6 @@ export const PoolActionsDialog = memo(function PoolActionsDialog({
                       disabled={isSupplyingLiquidity || isConfirmingLiquidity || isApprovingLiquidity || isSupplyingCollateral || isConfirmingCollateral || isApprovingCollateral || isWithdrawingLiquidity || isConfirmingWithdrawLiquidity || isWithdrawingCollateral || isConfirmingWithdrawCollateral}
                     />
                     <div className="absolute right-3 top-1/2 transform -translate-y-1/2 flex items-center gap-2">
-                      {/* Show Max button for supply actions */}
                       {(selectedAction === "supply-collateral" || selectedAction === "supply-liquidity") && (
                         <Button
                           type="button"
@@ -651,7 +589,6 @@ export const PoolActionsDialog = memo(function PoolActionsDialog({
                 </div>
               )}
 
-              {/* Show description for non-integrated actions */}
               {(selectedAction === "borrow" || selectedAction === "repay" || selectedAction === "repay-by-collateral") && (
                 <div className="text-center py-8">
                   <p className="text-gray-600 mb-6">
@@ -660,14 +597,12 @@ export const PoolActionsDialog = memo(function PoolActionsDialog({
                 </div>
               )}
 
-              {/* Transaction Status */}
               {((selectedAction === "supply-collateral" && (isApprovingCollateral || isApproveConfirmingCollateral || isApproveSuccessCollateral || isSupplyingCollateral || isConfirmingCollateral || isSuccessCollateral || isErrorCollateral)) ||
                 (selectedAction === "supply-liquidity" && (isApprovingLiquidity || isApproveConfirmingLiquidity || isApproveSuccessLiquidity || isSupplyingLiquidity || isConfirmingLiquidity || isSuccessLiquidity || isErrorLiquidity)) ||
                 (selectedAction === "withdraw-liquidity" && (isWithdrawingLiquidity || isConfirmingWithdrawLiquidity || isSuccessWithdrawLiquidity || errorWithdrawLiquidity)) ||
                 (selectedAction === "withdraw-collateral" && (isWithdrawingCollateral || isConfirmingWithdrawCollateral || isSuccessWithdrawCollateral || errorWithdrawCollateral))) && (
                 <Card className="p-4 bg-gradient-to-r from-gray-50 to-gray-100 border border-gray-200 rounded-xl">
                   <div className="space-y-3">
-                    {/* Approve Status */}
                     {(isApprovingCollateral || isApprovingLiquidity) && (
                       <div className="flex items-center gap-3 text-blue-600">
                         <div className="w-5 h-5 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
@@ -766,7 +701,6 @@ export const PoolActionsDialog = memo(function PoolActionsDialog({
                 </Card>
               )}
 
-              {/* Action Buttons */}
               {(selectedAction === "supply-collateral" || selectedAction === "supply-liquidity") ? (
                 <div className="space-y-3">
                   {/* Approve Button */}
@@ -788,7 +722,6 @@ export const PoolActionsDialog = memo(function PoolActionsDialog({
                     </Button>
                   )}
 
-                  {/* Supply Button */}
                   {((selectedAction === "supply-collateral" && isApprovedCollateral) || 
                     (selectedAction === "supply-liquidity" && isApprovedLiquidity)) && (
                     <Button
@@ -845,7 +778,6 @@ export const PoolActionsDialog = memo(function PoolActionsDialog({
       </DialogContent>
     </Dialog>
 
-    {/* Supply Liquidity Success Alert */}
     {showSuccessAlertLiquidity && (
       <SuccessAlert
         isOpen={showSuccessAlertLiquidity}
@@ -858,7 +790,6 @@ export const PoolActionsDialog = memo(function PoolActionsDialog({
       />
     )}
 
-    {/* Supply Collateral Success Alert */}
     {showSuccessAlertCollateral && (
       <SuccessAlert
         isOpen={showSuccessAlertCollateral}
@@ -871,7 +802,6 @@ export const PoolActionsDialog = memo(function PoolActionsDialog({
       />
     )}
 
-    {/* Withdraw Liquidity Success Alert */}
     {showSuccessAlertWithdrawLiquidity && (
       <SuccessAlert
         isOpen={showSuccessAlertWithdrawLiquidity}
@@ -884,7 +814,6 @@ export const PoolActionsDialog = memo(function PoolActionsDialog({
       />
     )}
 
-    {/* Withdraw Collateral Success Alert */}
     {showSuccessAlertWithdrawCollateral && (
       <SuccessAlert
         isOpen={showSuccessAlertWithdrawCollateral}
@@ -897,7 +826,6 @@ export const PoolActionsDialog = memo(function PoolActionsDialog({
       />
     )}
 
-    {/* Failed Alert */}
     {(showFailedAlertLiquidity || showFailedAlertCollateral || errorWithdrawLiquidity || errorWithdrawCollateral) && (
       <FailedAlert
         isOpen={showFailedAlertLiquidity || showFailedAlertCollateral || !!errorWithdrawLiquidity || !!errorWithdrawCollateral}

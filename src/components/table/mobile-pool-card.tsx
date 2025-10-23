@@ -4,7 +4,7 @@ import React, { useMemo, memo } from "react";
 import Image from "next/image";
 import { Card, CardContent } from "@/components/ui/card";
 import { useReadTotalSupplyAssets } from "@/hooks/read/useReadTotalSupplyAssets";
-import { useReadPoolApy } from "@/hooks/read/useReadPoolApy";
+import { useReadApy } from "@/hooks/read/useReadApy";
 import { formatUnits } from "viem";
 import { LendingPoolWithTokens } from "@/lib/graphql/lendingpool-list.fetch";
 import { ArrowRight } from "lucide-react";
@@ -39,7 +39,7 @@ export const MobilePoolCard = memo(function MobilePoolCard({
       pool.borrowToken as `0x${string}`
     );
 
-  const { supplyAPY, loading: apyLoading } = useReadPoolApy(
+  const { supplyApyFormatted, apyLoading } = useReadApy(
     pool.lendingPool as `0x${string}`
   );
 
@@ -145,7 +145,7 @@ export const MobilePoolCard = memo(function MobilePoolCard({
                 APY
               </div>
               <div className="text-sm sm:text-base font-semibold text-orange-600">
-                {apyLoading ? "..." : `${supplyAPY}%`}
+                {apyLoading ? "..." : `${supplyApyFormatted}%`}
               </div>
             </div>
 
@@ -173,7 +173,9 @@ export const MobilePoolCard = memo(function MobilePoolCard({
                 </div>
               </div>
               {totalSupplyAssetsLoading && (
-                <div className="text-xs md:text-sm text-green-600 mt-0.5">Updating...</div>
+                <div className="text-xs md:text-sm text-green-600 mt-0.5">
+                  Updating...
+                </div>
               )}
             </div>
           </div>

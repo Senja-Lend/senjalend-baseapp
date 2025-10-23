@@ -620,32 +620,6 @@ export const TokenBalanceTable = ({
             />
           ))}
 
-          {/* Show empty state if no balances found and not loading */}
-          {!isAnyLoading && !hasAnyBalance && (
-            <div className="text-center py-8 text-gray-500">
-              <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gray-100 flex items-center justify-center">
-                <svg
-                  className="w-8 h-8 text-gray-400"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
-                  />
-                </svg>
-              </div>
-              <p className="text-sm font-medium text-gray-700 mb-1">
-                No collateral found
-              </p>
-              <p className="text-xs text-gray-500">
-                You don&apos;t have any collateral in this pool
-              </p>
-            </div>
-          )}
         </CardContent>
       </Card>
 

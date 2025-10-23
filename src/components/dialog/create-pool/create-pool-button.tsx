@@ -20,7 +20,6 @@ export const CreatePoolButton = memo(function CreatePoolButton({
   const { isConnected, chainId } = useAccount();
   const router = useRouter();
 
-  // Check if wallet is connected and on correct chain
   const isOnTargetChain = chainId === 8453; // Base chain ID
   const isWalletReady = isConnected && isOnTargetChain;
 

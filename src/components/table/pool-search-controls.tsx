@@ -43,7 +43,7 @@ export const PoolSearchControls = memo(function PoolSearchControls({
   filteredPools,
   onPoolCreated,
   showCreateButton = true,
-  searchPlaceholder = "Search pools by token name or symbol...",
+  searchPlaceholder = "Search pools...",
   className,
 }: PoolSearchControlsProps) {
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);

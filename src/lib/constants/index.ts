@@ -1,6 +1,3 @@
-/**
- * Placeholder text constants
- */
 export const PLACEHOLDERS = {
   AMOUNT_INPUT: "Enter amount",
   SHARES_INPUT: "Enter shares amount",
@@ -9,9 +6,6 @@ export const PLACEHOLDERS = {
   LTV_INPUT: "Enter LTV percentage",
 } as const;
 
-/**
- * Button text constants
- */
 export const BUTTON_TEXTS = {
   SUPPLY_COLLATERAL: "Supply Collateral",
   SUPPLY_LIQUIDITY: "Supply Liquidity",
@@ -27,9 +21,6 @@ export const BUTTON_TEXTS = {
   CREATE_POOL: "Create Pool",
 } as const;
 
-/**
- * Loading messages
- */
 export const LOADING_MESSAGES = {
   SUPPLYING: "Supplying...",
   BORROWING: "Borrowing...",
@@ -43,9 +34,6 @@ export const LOADING_MESSAGES = {
   CREATING_POOL: "Creating pool...",
 } as const;
 
-/**
- * Success messages
- */
 export const SUCCESS_MESSAGES = {
   COLLATERAL_SUPPLIED: "Collateral supplied successfully!",
   LIQUIDITY_SUPPLIED: "Liquidity supplied successfully!",
@@ -59,9 +47,6 @@ export const SUCCESS_MESSAGES = {
   POOL_CREATED: "Pool created successfully!",
 } as const;
 
-/**
- * Error messages
- */
 export const ERROR_MESSAGES = {
   TRANSACTION_FAILED: "Transaction failed",
   WALLET_NOT_CONNECTED: "Please connect your wallet",
@@ -72,9 +57,6 @@ export const ERROR_MESSAGES = {
   UNSUPPORTED_CHAIN: "Unsupported chain",
 } as const;
 
-/**
- * Pool action types
- */
 export const POOL_ACTIONS = {
   SUPPLY_COLLATERAL: "supply-collateral",
   SUPPLY_LIQUIDITY: "supply-liquidity",
@@ -85,22 +67,13 @@ export const POOL_ACTIONS = {
   WITHDRAW_LIQUIDITY: "withdraw-liquidity",
 } as const;
 
-/**
- * Chain configurations
- */
 export const CHAIN_CONFIG = {
   SUPPORTED_CHAINS: [8453, 42161], // Base, Arbitrum, 
   DEFAULT_CHAIN: 8453, // Base
 } as const;
 
-/**
- * Default chain ID constant
- */
 export const DEFAULT_CHAIN_ID = 8453; // Base
 
-/**
- * Validation constants
- */
 export const VALIDATION = {
   LTV_MIN: 0,
   LTV_MAX: 100,
@@ -109,9 +82,6 @@ export const VALIDATION = {
   DECIMALS_MAX: 18,
 } as const;
 
-/**
- * UI constants
- */
 export const UI_CONSTANTS = {
   MAX_DECIMALS: 18,
   MIN_AMOUNT: 0.000001,

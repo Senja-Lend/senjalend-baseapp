@@ -10,7 +10,7 @@ import { useCurrentChainId } from "@/lib/chain/use-chain";
 import { useSupplyLiquidity } from "@/hooks/write/useSupplyLiquidity";
 import { useSupplyCollateral } from "@/hooks/write/useSupplyCollateral";
 import { useUserWalletBalance } from "@/hooks/read/useReadUserBalance";
-import { useReadPoolApy } from "@/hooks/read/useReadPoolApy";
+import { useReadApy } from "@/hooks/read/useReadApy";
 import { useRefetch } from "@/hooks/useRefetch";
 import { SuccessAlert, FailedAlert } from "@/components/alert";
 import { InlineSpinner } from "@/components/ui/spinner";
@@ -40,7 +40,7 @@ const SupplyTab = ({ pool }: SupplyTabProps) => {
   const currentChainId = useCurrentChainId();
 
   // Get APY for the pool
-  const { supplyAPY, loading: apyLoading, refetch: refetchApy } = useReadPoolApy(pool?.lendingPool);
+  const { supplyApyFormatted, apyLoading, refetchApy  } = useReadApy(pool?.lendingPool || "0x0000000000000000000000000000000000000000");
 
   // Refetch functionality
   const { addRefetchFunction, removeRefetchFunction, triggerRefetch } = useRefetch({
@@ -289,7 +289,7 @@ const SupplyTab = ({ pool }: SupplyTabProps) => {
                 </div>
                 <div>
                   <p className="text-sm text-senja-brown/70 mb-1">APY:</p>
-                  <p className="font-semibold text-purple-600">{apyLoading ? <InlineSpinner size="sm" /> : `${supplyAPY}%`}</p>
+                  <p className="font-semibold text-purple-600">{apyLoading ? <InlineSpinner size="sm" /> : `${supplyApyFormatted}%`}</p>
                 </div>
                 <div>
                   <p className="text-sm text-senja-brown/70 mb-1">LTV:</p>

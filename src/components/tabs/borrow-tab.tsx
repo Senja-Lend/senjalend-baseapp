@@ -11,7 +11,7 @@ import { SuccessAlert } from "@/components/alert/success-alert";
 import { FailedAlert } from "@/components/alert/failed-alert";
 import { BearyTabGuard } from "@/components/wallet/beary-tab-guard";
 import { useRefetch } from "@/hooks/useRefetch";
-import { useReadPoolApy } from "@/hooks/read/useReadPoolApy";
+import { useReadApy } from "@/hooks/read/useReadApy";
 import { useUserWalletBalance } from "@/hooks/read/useReadUserBalance";
 import { useReadFee } from "@/hooks/read/useReadFee";
 import { useReadMaxBorrow } from "@/hooks/read/useReadMaxBorrow";
@@ -53,18 +53,16 @@ const BorrowTab = ({ pool }: BorrowTabProps) => {
     return selectedChain?.destinationEndpoint || 30184; // Default to Base endpoint
   }, [chainTo]);
 
-  // Refetch functionality
   const { addRefetchFunction, removeRefetchFunction } = useRefetch({
     refetchInterval: 0, // Disable auto-refetch, we'll trigger manually
     enabled: false,
   });
 
-  // Get APY for the pool
   const {
-    borrowAPY,
-    loading: apyLoading,
-    refetch: refetchApy,
-  } = useReadPoolApy(pool?.lendingPool);
+    borrowApyFormatted,
+    apyLoading,
+    refetchApy,
+  } = useReadApy(pool?.lendingPool || "0x0000000000000000000000000000000000000000");
 
   // Get user balance for the borrow token (keeping for potential future use)
   const { refetchWalletBalance } = useUserWalletBalance(
@@ -195,7 +193,7 @@ const BorrowTab = ({ pool }: BorrowTabProps) => {
             symbol: pool.borrowTokenInfo?.symbol || "Token",
             logo: pool.borrowTokenInfo?.logo || "/token/usdt.png",
           }}
-          apy={apyLoading ? "Loading..." : borrowAPY}
+          apy={apyLoading ? "Loading..." : borrowApyFormatted}
           ltv={(Number(pool.ltv) / 1e16).toFixed(1)}
           apyLabel="Interest Rate"
         />

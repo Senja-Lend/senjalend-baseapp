@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, useCallback } from "react";
-
 import {
   Dialog,
   DialogContent,
@@ -13,11 +12,8 @@ import { PoolsOverview } from "@/components/table/pools-overview";
 import { LendingPoolWithTokens } from "@/lib/graphql/lendingpool-list.fetch";
 import { BearyWalletConnectionGuard } from "@/components/wallet/beary-wallet-connection-guard";
 import { useWalletConnectionGuard } from "@/hooks/useWalletConnectionGuard";
-
-// Import tab components
 import { SupplyTab, BorrowTab, RepayTab, WithdrawTab } from "@/components/tabs";
 
-// Custom PoolsOverview wrapper that accepts onPoolClick prop
 interface PoolsOverviewWithCustomHandlerProps {
   onPoolClick: (pool: LendingPoolWithTokens) => void;
 }
@@ -34,7 +30,6 @@ const Page = () => {
   const [selectedPool, setSelectedPool] =
     useState<LendingPoolWithTokens | null>(null);
 
-  // Wallet connection guard
   const {
     isGuardActive,
     selectedPool: guardSelectedPool,
@@ -48,21 +43,21 @@ const Page = () => {
     setActiveTab(value);
   };
 
-  const handlePoolClick = useCallback((pool: LendingPoolWithTokens) => {
-    // Use wallet connection guard to ensure wallet is connected and on correct chain
-    triggerWalletGuard(pool);
-  }, [triggerWalletGuard]);
+  const handlePoolClick = useCallback(
+    (pool: LendingPoolWithTokens) => {
+      triggerWalletGuard(pool);
+    },
+    [triggerWalletGuard]
+  );
 
   const handleDialogClose = useCallback(() => {
     setIsDialogOpen(false);
     setSelectedPool(null);
-    // Also clear the guard selected pool to prevent conflicts
     if (guardSelectedPool) {
       handleCancelWallet();
     }
   }, [guardSelectedPool, handleCancelWallet]);
 
-  // Handle when wallet is ready - open the pool dialog
   const handleWalletReadyAndOpenDialog = useCallback(() => {
     if (guardSelectedPool) {
       setSelectedPool(guardSelectedPool);
@@ -70,23 +65,25 @@ const Page = () => {
     }
   }, [guardSelectedPool]);
 
-  // Auto-open dialog when wallet becomes ready
   React.useEffect(() => {
     if (isWalletReady && guardSelectedPool && !isDialogOpen && !isGuardActive) {
       handleWalletReadyAndOpenDialog();
     }
-  }, [isWalletReady, guardSelectedPool, isDialogOpen, isGuardActive, handleWalletReadyAndOpenDialog]);
+  }, [
+    isWalletReady,
+    guardSelectedPool,
+    isDialogOpen,
+    isGuardActive,
+    handleWalletReadyAndOpenDialog,
+  ]);
 
   return (
     <div className="min-h-screen w-full pb-20 relative overflow-hidden bg-gradient-to-br from-senja-background via-senja-cream/30 to-senja-cream-light/40 flex mt-8">
-      {/* Mobile-optimized container */}
       <div className="w-full max-w-5xl mx-auto px-3 sm:px-4 lg:px-8 -mt-2">
-        {/* Pool Overview */}
         <div className="relative">
           <PoolsOverviewWithCustomHandler onPoolClick={handlePoolClick} />
         </div>
 
-        {/* Tab Dialog */}
         <Dialog open={isDialogOpen} onOpenChange={handleDialogClose}>
           <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto bg-white/95 backdrop-blur-sm border-senja-orange/30 w-[calc(100vw-2rem)] sm:w-full">
             <DialogHeader>
@@ -151,7 +148,6 @@ const Page = () => {
         </Dialog>
       </div>
 
-      {/* Wallet Connection Guard */}
       <BearyWalletConnectionGuard
         isActive={isGuardActive}
         onReady={handleWalletReady}
