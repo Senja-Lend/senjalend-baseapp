@@ -453,7 +453,7 @@ export const UserPortfolio = memo(function UserPortfolio({
                       </span>
                     </div>
                     <div className="text-center sm:text-left">
-                      <p className="text-md sm:text-xl font-semibold bg-gradient-to-r from-orange-600 to-pink-600 bg-clip-text text-transparent">
+                      <p className="text-md sm:text-md font-semibold bg-gradient-to-r from-orange-600 to-pink-600 bg-clip-text text-transparent">
                         {healthFactorLoading ? (
                           <InlineSpinner size="sm" />
                         ) : (
@@ -472,7 +472,7 @@ export const UserPortfolio = memo(function UserPortfolio({
                       </span>
                     </div>
                     <div className="text-center sm:text-right">
-                      <p className="text-md sm:text-xl font-semibold bg-gradient-to-r from-pink-600 to-red-600 bg-clip-text text-transparent">
+                      <p className="text-md sm:text-md font-semibold bg-gradient-to-r from-pink-600 to-red-600 bg-clip-text text-transparent">
                         {userBorrowSharesLoading ? (
                           <InlineSpinner size="sm" />
                         ) : (
@@ -486,30 +486,30 @@ export const UserPortfolio = memo(function UserPortfolio({
 
               {/* Total Balance Section */}
               {totalUsdtFromTokens > 0 && (
-                <div className="bg-gradient-to-r from-orange-50 via-pink-50 to-red-50 rounded-xl p-4 sm:p-6 border border-orange-200 shadow-lg">
+                <div className="bg-gradient-to-r from-orange-50 via-pink-50 to-red-50 rounded-md p-4 sm:p-6 border border-orange-200 shadow-lg">
                   <div className="space-y-4">
                     <div className="text-center mb-4">
-                      <h3 className="text-md sm:text-xl font-semibold text-gray-800 flex items-center justify-center gap-2">
+                      <h3 className="text-md sm:text-md font-semibold text-gray-800 flex items-center justify-center gap-2">
                         <div className="w-2 h-2 bg-gradient-to-r from-orange-500 to-pink-500 rounded-full"></div>
                         Total Collateral
                       </h3>
                     </div>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div className="text-center sm:text-left">
-                        <p className="text-xs sm:text-sm font-medium text-gray-600 mb-1">
+                        <p className="text-sm sm:text-md font-semibold text-gray-700 mb-1">
                           USD Value
                         </p>
-                        <p className="text-md sm:text-2xl font-semibold bg-gradient-to-r from-orange-600 to-pink-600 bg-clip-text text-transparent">
+                        <p className="text-sm sm:text-md font-medium bg-gradient-to-r from-orange-600 to-pink-600 bg-clip-text text-transparent">
                           {formatLargeNumber(totalUsdtFromTokens.toFixed(2))}{" "}
                           USDT
                         </p>
                       </div>
                       <div className="text-center sm:text-right">
-                        <p className="text-xs sm:text-sm font-medium text-gray-600 mb-1">
+                        <p className="text-sm sm:text-md font-medium text-gray-800 mb-1">
                           {selectedPool?.collateralTokenInfo?.symbol || "Token"}{" "}
                           Collateral
                         </p>
-                        <p className="text-md sm:text-xl font-semibold bg-gradient-to-r from-pink-600 to-red-600 bg-clip-text text-transparent">
+                        <p className="text-sm sm:text-md font-semibold bg-gradient-to-r from-pink-600 to-red-600 bg-clip-text text-transparent">
                           <PortfolioCollateralEquivalent
                             usdtValue={totalUsdtFromTokens}
                             selectedPool={selectedPool}
