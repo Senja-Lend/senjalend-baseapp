@@ -1,4 +1,4 @@
-import { gql } from 'graphql-request';
+import { gql } from "graphql-request";
 
 export const GET_USER_TRANSACTIONS = gql`
   query GetUserTransactions($user: String!) {
@@ -189,10 +189,7 @@ export const GET_USER_TRANSACTIONS = gql`
 export const GET_ALL_TRANSACTIONS = gql`
   query GetAllTransactions {
     # Supply Liquidity
-    supplyLiquidities(
-      orderBy: timestamp
-      orderDirection: desc
-    ) {
+    supplyLiquidities(orderBy: timestamp, orderDirection: desc) {
       id
       user {
         id
@@ -214,10 +211,7 @@ export const GET_ALL_TRANSACTIONS = gql`
     }
 
     # Withdraw Liquidity
-    withdrawLiquidities(
-      orderBy: timestamp
-      orderDirection: desc
-    ) {
+    withdrawLiquidities(orderBy: timestamp, orderDirection: desc) {
       id
       user {
         id
@@ -239,10 +233,7 @@ export const GET_ALL_TRANSACTIONS = gql`
     }
 
     # Supply Collateral
-    supplyCollaterals(
-      orderBy: timestamp
-      orderDirection: desc
-    ) {
+    supplyCollaterals(orderBy: timestamp, orderDirection: desc) {
       id
       user {
         id
@@ -263,10 +254,7 @@ export const GET_ALL_TRANSACTIONS = gql`
     }
 
     # Borrow
-    borrowDebtCrosschains(
-      orderBy: timestamp
-      orderDirection: desc
-    ) {
+    borrowDebtCrosschains(orderBy: timestamp, orderDirection: desc) {
       id
       user {
         id
@@ -290,10 +278,7 @@ export const GET_ALL_TRANSACTIONS = gql`
     }
 
     # Withdraw Collateral
-    positionWithdrawCollaterals(
-      orderBy: timestamp
-      orderDirection: desc
-    ) {
+    positionWithdrawCollaterals(orderBy: timestamp, orderDirection: desc) {
       id
       user {
         id
@@ -313,10 +298,7 @@ export const GET_ALL_TRANSACTIONS = gql`
     }
 
     # Repay
-    repayWithCollateralByPositions(
-      orderBy: timestamp
-      orderDirection: desc
-    ) {
+    repayWithCollateralByPositions(orderBy: timestamp, orderDirection: desc) {
       id
       user {
         id
@@ -338,10 +320,7 @@ export const GET_ALL_TRANSACTIONS = gql`
     }
 
     # Swap Collateral
-    positionSwapTokenByPositions(
-      orderBy: timestamp
-      orderDirection: desc
-    ) {
+    positionSwapTokenByPositions(orderBy: timestamp, orderDirection: desc) {
       id
       user {
         id

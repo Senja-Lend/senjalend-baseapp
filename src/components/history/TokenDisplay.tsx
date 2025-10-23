@@ -11,8 +11,6 @@ export function TokenDisplay({ address, chainId = 8453, showAddress = false }: T
   const token = getTokenByAddress(address, chainId);
 
   if (!token) {
-    // This should not happen since we filter out unknown tokens in TransactionTable
-    // But provide a fallback just in case
     return (
       <div className="flex items-center gap-2">
         <div className="w-6 h-6 bg-gray-200 rounded-full flex items-center justify-center">
